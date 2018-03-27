@@ -12,7 +12,11 @@
                     @foreach($data as $berita)
                         <div class="card">
                             <div class="card-block">
-                                <h4>{{$berita->judul}}</h4>
+                                <h4 class="card-title">{{$berita->judul}}
+                                <br>
+                                    <small class="text-muted">{{$berita->created_at->format('d-m-Y')}}</small>
+                                </h4>
+
                                 <p class="card-text">{{$berita->isi}}</p>
                                 <hr>
                             </div>

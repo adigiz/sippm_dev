@@ -12,13 +12,13 @@
                         {{ method_field('PUT') }}
                         <input name="_method" type="hidden" value="PUT">
                         <div class="form-group row">
-                            <label for="niph" class="col-2 col-form-label">Judul</label>
+                            <label for="judul" class="col-2 col-form-label">Judul</label>
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="judul" value="{{$berita->judul}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="pangkat" class="col-2 col-form-label">Isi</label>
+                            <label for="isi" class="col-2 col-form-label">Isi</label>
                             <div class="col-10">
                                 <textarea class="form-control" value="{{$berita->isi}}" name="isi"></textarea>
                             </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Profile;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanPenelitianController extends Controller
 {
@@ -22,7 +23,7 @@ class PengajuanPenelitianController extends Controller
         $profilsId = $profils->id;
         $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->first();
 //        $data = Pengajuan::where('profil_id','2')->first();
-        return view('users/pengajuan_penelitian.index', $data);
+        return view('users/daftar_pengajuan.index', $data);
     }
 
     /**
@@ -32,19 +33,16 @@ class PengajuanPenelitianController extends Controller
      */
     public function create()
     {
-        if (Pengajuan::where('profil_id', '=', Auth::id())->exists()) {
-            $pengajuan = Pengajuan::with('profils')->get();
-            $data = Pengajuan::all();
-//            return view('users/pengajuan_penelitian.index', compact('data',$pengajuan));
-            return redirect()->route('pengajuan_penelitian.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
-        } else {
+        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->doesntExist();
+        if($var) {
             $id = Auth::id();
             $data['users'] = User::find($id);
             $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
             //$data = PengajuanPenelitian::with('profils')->get();
-            return view('users/pengajuan_penelitian.create', $data);
+            return view('users/pengajuan_pengabdian.create', $data);
+        } else {
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
         }
-
     }
 
     /**
@@ -64,6 +62,7 @@ class PengajuanPenelitianController extends Controller
         $data->jumlah_lab = $request->jumlah_lab;
         $data->jumlah_mhs = $request->jumlah_mhs;
         $data->no_telp = $request->no_telp;
+        $data->total_dana = $request->total_dana;
         $data->dana_pribadi = $request->dana_pribadi;
         $data->dana_lain = $request->dana_lain;
 
@@ -80,7 +79,7 @@ class PengajuanPenelitianController extends Controller
         $proposal->move('uploads/file',$newName);
         $data->proposal = $newName;
         $data->save();
-        return redirect()->route('pengajuan_penelitian.index')->with('alert-success','Berhasil Menambahkan Data!');
+        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
     }
 
     /**

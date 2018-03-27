@@ -11,7 +11,7 @@
                     <ul class="collapse">
                         <li><a href="{{ url('users/pengajuan_penelitian/create') }}">Penelitian</a></li>
                         <li><a href="{{ url('users/pengajuan_pengabdian/create') }}">Pengabdian</a></li>
-                        <li><a href="{{url('users/pengajuan_penelitian')}}">Daftar Pengajuan</a></li>
+                        <li><a href="{{url('users/daftar_pengajuan')}}">Daftar Pengajuan</a></li>
                         <li><a href="#">Log Harian</a></li>
                     </ul>
                 </li>

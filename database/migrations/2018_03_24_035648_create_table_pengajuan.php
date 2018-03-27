@@ -26,9 +26,10 @@ class CreateTablePengajuan extends Migration
         $table->string('jumlah_lab');
         $table->string('jumlah_mhs');
         $table->string('no_telp');
+        $table->string('total_dana');
         $table->string('dana_pribadi');
         $table->string('dana_lain');
-        $table->integer('persetujuan_id')->unsigned()->default('3');
+        $table->integer('persetujuan_id')->unsigned()->nullable();
         $table->foreign('persetujuan_id')->references('id')->on('jenis_persetujuans');
         $table->string('proposal');
         $table->timestamps();

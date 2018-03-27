@@ -19,10 +19,8 @@ class Profile extends Model
         return $this->belongsTo('App\User','user_id');
     }
 
-    public function pengajuanPenelitians(){
-        return $this->hasOne('App\PengajuanPenelitian');
+    public function pengajuans(){
+        return $this->hasMany('App\Pengajuan');
     }
-    public function pengajuanPengabdians(){
-        return $this->hasOne('App\PengajuanPengabdian');
-    }
+
 }

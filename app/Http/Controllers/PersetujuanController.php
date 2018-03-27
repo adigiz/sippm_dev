@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pengajuan;
 use App\Persetujuan;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class PersetujuanController extends Controller
      */
     public function index()
     {
-        //
+        $data['pengajuan'] = Pengajuan::all();
+        return view('admin.pengajuan.daftar_pengajuan.index', $data);
     }
 
     /**
@@ -24,7 +26,7 @@ class PersetujuanController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -67,9 +69,20 @@ class PersetujuanController extends Controller
      * @param  \App\Persetujuan  $persetujuan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Persetujuan $persetujuan)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Pengajuan::where('id',$id)->first();
+        $data->persetujuan_id = $request->persetujuan_id;
+        $data->save();
+        $id_persetujuan = $request->persetujuan_id;
+        if($id_persetujuan == '1'){
+            return redirect()->route('persetujuan.index')->with('alert-success','Pengajuan disetujui');
+        } elseif ($id_persetujuan == '2'){
+            return redirect()->route('persetujuan.index')->with('alert-warning','Pengajuan direvisi');
+        } else {
+            return redirect()->route('persetujuan.index')->with('alert-danger','Pengajuan ditolak');
+        }
+
     }
 
     /**

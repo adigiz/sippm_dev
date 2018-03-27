@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\JenisPengajuan;
+use Illuminate\Support\Facades\DB;
 
 class PengajuanPengabdianController extends Controller
 {
@@ -16,9 +17,12 @@ class PengajuanPengabdianController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $profil = Pengajuan::with('profils')->get();
-        $data = Pengajuan::all();
-        return view('users/pengajuan_pengabdian.index', compact('data',$profil));
+        $user      = User::find(Auth::id());
+        $profils  = $user->profils;
+        $profilsId = $profils->id;
+        $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->first();
+//        $data = Pengajuan::where('profil_id','2')->first();
+        return view('users/daftar_pengajuan.index', $data);
     }
 
     /**
@@ -28,11 +32,16 @@ class PengajuanPengabdianController extends Controller
      */
     public function create()
     {
-        $id = Auth::user()->id;
-        $data['users'] = User::find($id);
-        $data['jenis_p'] = JenisPengajuan::where('id','2')->first();
-        //$data = PengajuanPenelitian::with('profils')->get();
-        return view('users/pengajuan_pengabdian.create', $data);
+        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->doesntExist();
+        if($var) {
+            $id = Auth::id();
+            $data['users'] = User::find($id);
+            $data['jenis_p'] = JenisPengajuan::where('id', '2')->first();
+            //$data = PengajuanPenelitian::with('profils')->get();
+            return view('users/pengajuan_pengabdian.create', $data);
+        } else {
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
+        }
     }
 
     /**
@@ -43,18 +52,33 @@ class PengajuanPengabdianController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new PengajuanPenelitian();
+        $data = new Pengajuan();
         $data->profil_id = $request->profil_id;
+        $data->jenis_pengajuan_id = $request->jenis_pengajuan_id;
         $data->judul_penelitian = $request->judul_penelitian;
         $data->abstrak = $request->abstrak;
         $data->jumlah_anggota = $request->jumlah_anggota;
         $data->jumlah_lab = $request->jumlah_lab;
         $data->jumlah_mhs = $request->jumlah_mhs;
         $data->no_telp = $request->no_telp;
+        $data->total_dana = $request->total_dana;
         $data->dana_pribadi = $request->dana_pribadi;
         $data->dana_lain = $request->dana_lain;
+
+        $rules = [
+            "proposal" => "required|mimes:pdf|max:2048"
+        ];
+        $this->validate($request, $rules);
+
+        $jp = $request->judul_penelitian;
+
+        $proposal = $request->file('proposal');
+        $ext = $proposal->getClientOriginalExtension();
+        $newName = "Proposal_Pengabdian_".$jp.".".$ext;
+        $proposal->move('uploads/file',$newName);
+        $data->proposal = $newName;
         $data->save();
-        return redirect()->route('pengajuan_pengabdian.index')->with('alert-success','Berhasil Menambahkan Data!');
+        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
     }
 
     /**

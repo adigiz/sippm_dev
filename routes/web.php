@@ -26,11 +26,14 @@ Route::prefix('admin')->group(function (){
     Route::post('/login', '\App\Http\Controllers\Auth\AdminLoginController@login')->name('admin.login.submit');
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
     Route::resource('/post','PostAdminController');
+    Route::resource('/persetujuan','PersetujuanController');
+//    Route::post('/pengajuan/daftar_pengajuan','PersetujuanController@update')->name('pengajuan.daftar_pengajuan.update');
 });
 
 Route::prefix('users')->group(function(){
     Route::resource('/profil','ProfileController');
     Route::resource('/pengajuan_penelitian','PengajuanPenelitianController');
     Route::resource('/pengajuan_pengabdian','PengajuanPengabdianController');
+    Route::resource('/daftar_pengajuan', 'DaftarPengajuanController');
 });
 //Route::resource('admin/post','PostAdminController');

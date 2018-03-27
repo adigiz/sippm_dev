@@ -60,6 +60,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="total_dana" class="col-2 col-form-label">Total Dana yang Dibutuhkan</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="total_dana">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="dana-pribadi" class="col-2 col-form-label">Dana Pribadi</label>
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="dana_pribadi">

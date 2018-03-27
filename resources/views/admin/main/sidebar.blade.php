@@ -9,7 +9,11 @@
                 <li>
                     <a href="#" class="waves-effect"><i class="fa fa-table m-r-10" aria-hidden="true"></i>Pengajuan</a>
                     <ul class="collapse">
-                        <li><a href="#">Daftar Pengajuan</a></li>
+                        <li><a href="{{url('admin/persetujuan/')}}">Semua Pengajuan</a></li>
+                        <li><a href="#">Belum Diperika</a></li>
+                        <li><a href="#">Disetujui</a></li>
+                        <li><a href="#">Revisi</a></li>
+                        <li><a href="#">Ditolak</a></li>
                     </ul>
                 </li>
                 <li>
