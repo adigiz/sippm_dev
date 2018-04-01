@@ -27,6 +27,9 @@ Route::prefix('admin')->group(function (){
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
     Route::resource('/post','PostAdminController');
     Route::resource('/persetujuan','PersetujuanController');
+    Route::get('/disetujui','PersetujuanController@disetujui');
+    Route::get('/ditolak', 'PersetujuanController@ditolak');
+    Route::get('/direvisi','PersetujuanController@direvisi');
 //    Route::post('/pengajuan/daftar_pengajuan','PersetujuanController@update')->name('pengajuan.daftar_pengajuan.update');
 });
 
@@ -35,5 +38,7 @@ Route::prefix('users')->group(function(){
     Route::resource('/pengajuan_penelitian','PengajuanPenelitianController');
     Route::resource('/pengajuan_pengabdian','PengajuanPengabdianController');
     Route::resource('/daftar_pengajuan', 'DaftarPengajuanController');
+    Route::resource('/pengajuan_penelitian/anggota_penelitian','AnggotaPenelitianController');
+    Route::resource('/pengajuan_pengabdian/anggota_pengabdian','AnggotaPengabdianController');
 });
 //Route::resource('admin/post','PostAdminController');

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Anggota;
 use App\JenisPengajuan;
+use App\Mitra;
 use App\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Profile;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Helper\Table;
 
 class PengajuanPenelitianController extends Controller
 {
@@ -21,7 +24,9 @@ class PengajuanPenelitianController extends Controller
         $user      = User::find(Auth::id());
         $profils  = $user->profils;
         $profilsId = $profils->id;
-        $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->first();
+        $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->orderBy('created_at','desc')->first();
+        $id_pengajuan = Pengajuan::where('profil_id',$profilsId)->orderBy('created_at','desc')->first()->id;
+        $data['anggotas'] = Anggota::where('pengajuan_id',$id_pengajuan);
 //        $data = Pengajuan::where('profil_id','2')->first();
         return view('users/daftar_pengajuan.index', $data);
     }
@@ -39,9 +44,16 @@ class PengajuanPenelitianController extends Controller
             $data['users'] = User::find($id);
             $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
             //$data = PengajuanPenelitian::with('profils')->get();
-            return view('users/pengajuan_pengabdian.create', $data);
+            return view('users/pengajuan_penelitian.create', $data);
         } else {
-            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
+            $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
+            if($check){
+                return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+            }
+            else {
+                return redirect()->route('anggota_penelitian.create')->with('alert-warning','Tambahkan Anggota');
+            }
         }
     }
 
@@ -66,6 +78,8 @@ class PengajuanPenelitianController extends Controller
         $data->dana_pribadi = $request->dana_pribadi;
         $data->dana_lain = $request->dana_lain;
 
+
+
         $rules = [
             "proposal" => "required|mimes:pdf|max:2048"
         ];
@@ -79,10 +93,21 @@ class PengajuanPenelitianController extends Controller
         $proposal->move('uploads/file',$newName);
         $data->proposal = $newName;
         $data->save();
-        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
+
+        $mitra = new Mitra();
+        $mitra->nama_mitra = $request->nama_mitra;
+        $mitra->cp_mitra = $request->cp_mitra;
+        $mitra->jabatan_mitra = $request->jabatan_mitra;
+        $mitra->alamat_mitra = $request->alamat_mitra;
+        $mitra->telp_mitra = $request->telp_mitra;
+        $pengajuan =  DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
+        $mitra->pengajuan_id = $pengajuan;
+        $mitra->save();
+//        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
+        return redirect()->route('anggota_penelitian.create')->with('alert-success','Tambahkan Anggota');
     }
 
-    /**
+    /**Pengajuan::select('id')->where('profil_id',User::find(Auth::id()))->where('jenis_pengajuan_id',1);
      * Display the specified resource.
      *
      * @param  \App\Pengajuan  $pengajuan

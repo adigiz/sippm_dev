@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\JenisPengajuan;
 use Illuminate\Support\Facades\DB;
+use App\Mitra;
 
 class PengajuanPengabdianController extends Controller
 {
@@ -40,7 +41,14 @@ class PengajuanPengabdianController extends Controller
             //$data = PengajuanPenelitian::with('profils')->get();
             return view('users/pengajuan_pengabdian.create', $data);
         } else {
-            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
+            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
+            $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
+            if($check){
+                return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
+            }
+            else {
+                return redirect()->route('anggota_pengabdian.create')->with('alert-warning','Tambahkan Anggota');
+            }
         }
     }
 
@@ -78,8 +86,20 @@ class PengajuanPengabdianController extends Controller
         $proposal->move('uploads/file',$newName);
         $data->proposal = $newName;
         $data->save();
-        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
+
+        $mitra = new Mitra();
+        $mitra->nama_mitra = $request->nama_mitra;
+        $mitra->cp_mitra = $request->cp_mitra;
+        $mitra->jabatan_mitra = $request->jabatan_mitra;
+        $mitra->alamat_mitra = $request->alamat_mitra;
+        $mitra->telp_mitra = $request->telp_mitra;
+        $pengajuan =  DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
+        $mitra->pengajuan_id = $pengajuan;
+        $mitra->save();
+//        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
+        return redirect()->route('anggota_pengabdian.create')->with('alert-success','Tambahkan Anggota');
     }
+
 
     /**
      * Display the specified resource.

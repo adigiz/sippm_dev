@@ -11,9 +11,9 @@
                     <ul class="collapse">
                         <li><a href="{{url('admin/persetujuan/')}}">Semua Pengajuan</a></li>
                         <li><a href="#">Belum Diperika</a></li>
-                        <li><a href="#">Disetujui</a></li>
-                        <li><a href="#">Revisi</a></li>
-                        <li><a href="#">Ditolak</a></li>
+                        <li><a href="{{url('admin/disetujui')}}">Disetujui</a></li>
+                        <li><a href="{{url('admin/direvisi')}}">Revisi</a></li>
+                        <li><a href="{{url('admin/ditolak')}}">Ditolak</a></li>
                     </ul>
                 </li>
                 <li>

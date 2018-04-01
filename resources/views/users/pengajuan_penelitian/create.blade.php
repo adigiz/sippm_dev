@@ -58,7 +58,45 @@
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="no_telp">
                             </div>
+                        </div> <h4 class="card-title"> Form Mitra</h4>
+                        <div class="form-group row">
+                            <label class="custom-control custom-checkbox">
+                                <input class="styled-checkbox" id="mitra-toggle" type="checkbox" name="mitraToggle" onclick="showMitra('mitra','mitra2','mitra3','mitra4','mitra5')">
+                                <label for="mitra-toggle">Memiliki Mitra?</label>
+                            </label>
                         </div>
+                        <div class="form-group row" id="mitra" style="display:none">
+                            <label for="nama-mitra" class="col-2 col-form-label">Nama Mitra</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="nama_mitra">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="mitra2" style="display:none">
+                            <label for="cp-mitra" class="col-2 col-form-label">Contact Person</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="cp_mitra">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="mitra3" style="display:none">
+                            <label for="jabatan-mitra" class="col-2 col-form-label">Jabatan</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="jabatan_mitra">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="mitra4" style="display:none">
+                            <label for="alamat-mitra" class="col-2 col-form-label">Alamat</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="alamat_mitra">
+                            </div>
+                        </div>
+                        <div class="form-group row" id="mitra5" style="display:none">
+                            <label for="telp-mitra" class="col-2 col-form-label">No Telfon</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="telp_mitra">
+                            </div>
+                        </div>
+                        <hr>
+                        <h4 class="card-title">Form Pendanaan</h4>
                         <div class="form-group row">
                             <label for="total_dana" class="col-2 col-form-label">Total Dana yang Dibutuhkan</label>
                             <div class="col-10">

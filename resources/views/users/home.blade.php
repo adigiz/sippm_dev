@@ -12,6 +12,8 @@
     <link href="{{ asset('/ui/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/colors/blue.css') }}" id="theme" rel="stylesheet">
+    <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/select2-bootstrap.css') }}" rel="stylesheet">
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -48,6 +50,7 @@
 <script src="{{ asset('/ui/assets/plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('/ui/assets/plugins/bootstrap/js/tether.min.js') }}"></script>
 <script src="{{ asset('/ui/assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{asset('js/select2.full.min.js')}}"></script>
 <script src="{{ asset('/ui/lite version/js/jquery.slimscroll.js') }}"></script>
 <script src="{{ asset('/ui/lite version/js/waves.js') }}"></script>
 <script src="{{ asset('/ui/lite version/js/sidebarmenu.js') }}"></script>

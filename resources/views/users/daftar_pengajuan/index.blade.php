@@ -19,6 +19,13 @@
                     @endif
 
                     <h4 class="card-title">{{$pengajuan->judul_penelitian}}</h4>
+                    <h5 class="card-subtitle">Kelengkapan data :
+                            @if(empty($anggotas->pengajuan_id))
+                                Belum lengkap
+                            @else
+                                Data pengajuan lengkap
+                            @endif
+                        </h5>
                     <p>{{$pengajuan->abstrak}}</p>
                         <div class="form-group">
                             <div class="col-sm-12 text-right">

@@ -24,7 +24,16 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        //
+        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->doesntExist();
+        if($var) {
+            $id = Auth::id();
+            $data['users'] = User::find($id);
+            $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+            //$data = PengajuanPenelitian::with('profils')->get();
+            return view('users/pengajuan_penelitian.create', $data);
+        } else {
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+        }
     }
 
     /**
