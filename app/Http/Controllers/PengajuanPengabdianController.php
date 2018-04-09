@@ -9,7 +9,9 @@ use App\User;
 use App\JenisPengajuan;
 use Illuminate\Support\Facades\DB;
 use App\Mitra;
-
+use App\Profile;
+use App\WaktuPengajuan;
+use Carbon\Carbon;
 class PengajuanPengabdianController extends Controller
 {
     /**
@@ -33,23 +35,47 @@ class PengajuanPengabdianController extends Controller
      */
     public function create()
     {
-        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->doesntExist();
-        if($var) {
-            $id = Auth::id();
-            $data['users'] = User::find($id);
-            $data['jenis_p'] = JenisPengajuan::where('id', '2')->first();
-            //$data = PengajuanPenelitian::with('profils')->get();
-            return view('users/pengajuan_pengabdian.create', $data);
-        } else {
-            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
-            $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
-            if($check){
-                return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
-            }
-            else {
-                return redirect()->route('anggota_pengabdian.create')->with('alert-warning','Tambahkan Anggota');
-            }
+        if( DB::table('waktu_pengajuans')->orderBy('created_at', 'desc')->first() == NULL){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
         }
+
+        $tanggal_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_buka;
+        $waktu_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_buka;
+        $tanggal_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_tutup;
+        $waktu_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_tutup;
+
+
+        $buka = date('Y-m-d H:i:s', strtotime("$tanggal_buka $waktu_buka"));
+        $tutup = date('Y-m-d H:i:s', strtotime("$tanggal_tutup $waktu_tutup"));
+        $buka_carbon = Carbon::parse($buka);
+        $tutup_carbon = Carbon::parse($tutup);
+        $sekarang = Carbon::now();
+        if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
+        if(Profile::where('user_id',Auth::id())->exists()){
+            $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->doesntExist();
+            if($var) {
+                $id = Auth::id();
+                $data['users'] = User::find($id);
+                $data['profile'] = Profile::where('user_id',$id)->first();
+                $data['jenis_p'] = JenisPengajuan::where('id', '2')->first();
+                //$data = PengajuanPenelitian::with('profils')->get();
+                return view('users/pengajuan_pengabdian.create', $data);
+            } else {
+                $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
+                $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
+                if($check){
+                    return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
+                }
+                else {
+                    return redirect()->route('anggota_pengabdian.create')->with('alert-warning','Tambahkan Anggota');
+                }
+            }
+        } else {
+            return redirect()->route('profil.create')->with('alert-warning','Anda belum mengisi profil');
+        }
+
     }
 
     /**

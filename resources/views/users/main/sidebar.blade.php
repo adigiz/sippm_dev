@@ -15,7 +15,12 @@
                         <li><a href="#">Log Harian</a></li>
                     </ul>
                 </li>
-
+                <li>
+                    <a href="{{ url('users/sedang_berjalan') }}" class="waves-effect"><i class="fa fa-bookmark m-r-10" aria-hidden="true"></i>Sedang Berjalan</a>
+                </li>
+                <li>
+                    <a href="{{ url('users/download') }}" class="waves-effect"><i class="fa fa-download m-r-10" aria-hidden="true"></i>Download</a>
+                </li>
                 <li>
                     <a href="#" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Profil</a>
                     <ul class="collapse">

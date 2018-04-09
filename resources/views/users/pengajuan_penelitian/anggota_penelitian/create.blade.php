@@ -12,7 +12,7 @@
                     <p class="text-muted">{{$pengajuan->judul_penelitian}}</p>
                     <strong>Nama Ketua</strong>
                     <br>
-                    <p class="text-muted">{{$user->name}}</p>
+                    <p class="text-muted">{{$ketua->name}}</p>
                     <strong>Total Dana yang Dibutuhkan</strong>
                     <br>
                     <p class="text-muted">{{$pengajuan->total_dana}}</p>
@@ -40,6 +40,7 @@
                             @for ($i = $pengajuan->jumlah_anggota; $i >= 1; $i--)
                                 <div class="input-group col-12" style="margin-bottom: 15px;">
                                     <select name="profil_id[]" class="select2" style="width: 100%">
+                                        <option value="">Pilih Anggota</option>
                                         @foreach($profile as $profiles)
                                             <option value="{{ $profiles->id}}">{{ $profiles->name }}</option>
                                         @endforeach

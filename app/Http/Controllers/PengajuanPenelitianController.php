@@ -6,12 +6,15 @@ use App\Anggota;
 use App\JenisPengajuan;
 use App\Mitra;
 use App\Pengajuan;
+use App\WaktuPengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Profile;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Helper\Table;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PengajuanPenelitianController extends Controller
 {
@@ -20,15 +23,25 @@ class PengajuanPenelitianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $user      = User::find(Auth::id());
-        $profils  = $user->profils;
-        $profilsId = $profils->id;
-        $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->orderBy('created_at','desc')->first();
-        $id_pengajuan = Pengajuan::where('profil_id',$profilsId)->orderBy('created_at','desc')->first()->id;
-        $data['anggotas'] = Anggota::where('pengajuan_id',$id_pengajuan);
-//        $data = Pengajuan::where('profil_id','2')->first();
-        return view('users/daftar_pengajuan.index', $data);
+    public function waktuPenelitian(){
+        if( DB::table('waktu_pengajuans')->orderBy('created_at', 'desc')->first() == NULL){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
+
+        $tanggal_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_buka;
+        $waktu_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_buka;
+        $tanggal_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_tutup;
+        $waktu_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_tutup;
+
+
+        $buka = date('Y-m-d H:i:s', strtotime("$tanggal_buka $waktu_buka"));
+        $tutup = date('Y-m-d H:i:s', strtotime("$tanggal_tutup $waktu_tutup"));
+        $buka_carbon = Carbon::parse($buka);
+        $tutup_carbon = Carbon::parse($tutup);
+        $sekarang = Carbon::now();
+        if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
     }
 
     /**
@@ -36,25 +49,52 @@ class PengajuanPenelitianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
-        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->doesntExist();
-        if($var) {
-            $id = Auth::id();
-            $data['users'] = User::find($id);
-            $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
-            //$data = PengajuanPenelitian::with('profils')->get();
-            return view('users/pengajuan_penelitian.create', $data);
-        } else {
-            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
-            $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
-            if($check){
-                return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
-            }
-            else {
-                return redirect()->route('anggota_penelitian.create')->with('alert-warning','Tambahkan Anggota');
-            }
+        if( DB::table('waktu_pengajuans')->orderBy('created_at', 'desc')->first() == NULL){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
         }
+
+        $tanggal_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_buka;
+        $waktu_buka = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_buka;
+        $tanggal_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_tutup;
+        $waktu_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_tutup;
+
+
+        $buka = date('Y-m-d H:i:s', strtotime("$tanggal_buka $waktu_buka"));
+        $tutup = date('Y-m-d H:i:s', strtotime("$tanggal_tutup $waktu_tutup"));
+        $buka_carbon = Carbon::parse($buka);
+        $tutup_carbon = Carbon::parse($tutup);
+        $sekarang = Carbon::now();
+        if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
+
+        if(Profile::where('user_id',Auth::id())->exists()){
+            $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->doesntExist();
+            if($var) {
+                $id = Auth::id();
+                $data['users'] = User::find($id);
+                $data['profile'] = Profile::where('user_id',$id)->first();
+                $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+                //$data = PengajuanPenelitian::with('profils')->get();
+                return view('users/pengajuan_penelitian.create', $data);
+            } else {
+                $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
+                $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
+                if($check){
+                    return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+                }
+                else {
+                    return redirect()->route('anggota_penelitian.create')->with('alert-warning','Tambahkan Anggota');
+                }
+            }
+
+        }  else {
+            return redirect()->route('profil.create')->with('alert-warning','Anda belum mengisi profil');
+        }
+
     }
 
     /**
@@ -113,9 +153,21 @@ class PengajuanPenelitianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function show(Pengajuan $pengajuan)
+    public function show($id)
     {
-        //
+        $data['pengajuan'] = Pengajuan::find($id);
+        $id_ketua = Pengajuan::find($id)->profil_id;
+        $id_profil_ketua = Profile::find($id_ketua)->user_id;
+        $data['users'] = User::find($id_profil_ketua);
+        $data['profile'] =  DB::table('users')
+            ->join('profils','profils.user_id','=','users.id')
+            ->join('pengajuans','pengajuans.profil_id','=','profils.id')
+            ->join('anggotas','anggotas.pengajuan_id','=','pengajuans.id')
+            ->where('anggotas.pengajuan_id','==', $id)
+            ->select('users.name')->get();
+
+
+        return view('users.pengajuan_penelitian.show', $data);
     }
 
     /**
@@ -126,7 +178,7 @@ class PengajuanPenelitianController extends Controller
      */
     public function edit(Pengajuan $pengajuan)
     {
-        //
+        return view('users/pengajuan_penelitian.edit');
     }
 
     /**

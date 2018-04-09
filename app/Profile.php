@@ -23,4 +23,8 @@ class Profile extends Model
         return $this->hasMany('App\Pengajuan');
     }
 
+    public function anggotas(){
+        return $this->hasMany('App\Anggota');
+    }
+
 }

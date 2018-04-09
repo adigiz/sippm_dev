@@ -10,7 +10,7 @@
                 <div class="card-block">
 
                         <center class="m-t-30"> <img src="/uploads/avatar/{{$profile->avatar}}" class="img-circle" width="150" />
-                            <h4 class="card-title m-t-10">{{$users->name}}</h4>
+                            <h4 class="card-title m-t-10">{{$profile->name}}</h4>
                             <h6 class="card-subtitle">{{$users->email}}</h6>
                         </center>
                         <div class="form-group">

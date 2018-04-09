@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Profile;
 use Illuminate\Http\Request;
 use App\Anggota;
 use App\Pengajuan;
@@ -18,9 +19,8 @@ class AnggotaPenelitianController extends Controller
         $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->exists();
         if($var) {
             $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
-            $data['user'] = User::find(Auth::id());
-            $data['profile'] =  DB::table('users')->join('profils','profils.user_id','=','users.id')->where('profils.id','!=', Auth::id())->select('users.name', 'profils.id')->get();
-//            $data['profile'] = Profile::with('users');
+            $data['ketua'] = Profile::where('user_id',Auth::id())->first();
+            $data['profile'] =  Profile::where('user_id','!=',Auth::id())->get();
             $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
             $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->first();
             return view('users/pengajuan_penelitian/anggota_penelitian.create', $data);
@@ -40,7 +40,11 @@ class AnggotaPenelitianController extends Controller
                 'profil_id' => $anggotas,
             ];
         }
-        Anggota::insert($datas);
-        return view('users/daftar_pengajuan.index');
+        if(empty($datas)){
+            return view('users.pengajuan_pennelitian.anggota_penelitian.create')->with('alert-danger','Harap mengisi seluruh anggota');
+        } else {
+            Anggota::insert($datas);
+            return redirect()->route('daftar_pengajuan.index');
+        }
     }
 }

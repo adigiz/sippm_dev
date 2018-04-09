@@ -20,7 +20,8 @@
             </ul>
             <ul class="navbar-nav my-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">Welcome {{Auth::User()->name}} <span class="caret"></span></a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">Selamat Datang
+                        <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <a class="nav-link waves-effect waves-dark" href="{{ url('logout') }}" aria-haspopup="true" aria-expanded="false">Logout</a>
                     </ul>

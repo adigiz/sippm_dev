@@ -95,3 +95,73 @@ $(function() {
     $("body").trigger("resize");
 });
 
+function showMitra (box,box2,box3,box4,box5) {
+
+    var chboxs = document.getElementsByName("mitraToggle");
+    var vis = "none";
+    for(var i=0;i<chboxs.length;i++) {
+        if(chboxs[i].checked){
+            vis = "";
+            break;
+        }
+    }
+    document.getElementById(box).style.display = vis;
+    document.getElementById(box2).style.display = vis;
+    document.getElementById(box3).style.display = vis;
+    document.getElementById(box4).style.display = vis;
+    document.getElementById(box5).style.display = vis;
+
+
+}
+
+$(document).ready(function() {
+    $(".select2").select2();
+});
+
+$(document).ready(function() {
+    // var profilId = $( "input[type=hidden][name=idProfil]" ).val();
+    $('select[name="jurusan"]').on('change', function(){
+        var jurusanId = $(this).val();
+        if(jurusanId) {
+            $.ajax({
+                url: '/users/profil/getProdi/'+jurusanId,
+                // url: '/profil/'+profilId+'/edit/getProdi/'+jurusanId,
+                type:"GET",
+                dataType:"json",
+                beforeSend: function(){
+                    $('#loader').css("visibility", "visible");
+                },
+
+                success:function(data) {
+
+                    $('select[name="prodi"]').empty();
+
+                    $.each(data, function(key, value){
+
+                        $('select[name="prodi"]').append('<option value="'+ key +'">' + value + '</option>');
+
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // check status && error
+                },
+                complete: function(){
+                    $('#loader').css("visibility", "hidden");
+                }
+            });
+        } else {
+            $('select[name="prodi"]').empty();
+        }
+
+    });
+
+});
+
+$(function() {
+    $( "#datepicker" ).datepicker();
+});
+
+$(function() {
+    $('.clockpicker').clockpicker();
+});
+

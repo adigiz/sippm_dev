@@ -7,8 +7,20 @@
         <div class="col-12 m-t-30">
             <div class="card">
                 <div class="card-block">
-                    <form class="form-horizontal form-material" method='post' action="{{route('profil.store')}}">
+                    <form class="form-horizontal form-material" enctype="multipart/form-data" method='post' action="{{route('profil.store')}}">
                         {{csrf_field()}}
+                        <div class="form-group row">
+                            <label for="name" class="col-2 col-form-label">Nama</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text"  name="name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="avatar" class="col-2 col-form-label">Foto Profil</label>
+                            <div class="col-10">
+                                <input class="form-control-file" type="file"  name="avatar">
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">NIPH</label>
                             <div class="col-10">
@@ -27,16 +39,36 @@
                                 <input class="form-control" type="text"  name="jabatan">
                             </div>
                         </div>
+                        {{--<div class="form-group row">--}}
+                            {{--<label for="jurusan" class="col-2 col-form-label">Jurusan</label>--}}
+                            {{--<div class="col-10">--}}
+                                {{--<input class="form-control" type="text"  name="jurusan">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group row">--}}
+                            {{--<label for="prodi" class="col-2 col-form-label">Prodi</label>--}}
+                            {{--<div class="col-10">--}}
+                                {{--<input class="form-control" type="text"  name="prodi">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="form-group row">
                             <label for="jurusan" class="col-2 col-form-label">Jurusan</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="jurusan">
+                                <select class="custom-select col-12" id="jurusan" name="jurusan">
+                                    <option value="">Pilih Jurusan</option>
+                                    @foreach ($jurusan as $jurusans)
+                                        <option value="{{ $jurusans->id}}"> {{ $jurusans->nama_jurusan }}</option>
+                                    @endforeach
+
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="prodi" class="col-2 col-form-label">Prodi</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="prodi">
+                                <select class="custom-select col-12" id="prodi" name="prodi">
+                                    <option value="">Pilih Prodi</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">

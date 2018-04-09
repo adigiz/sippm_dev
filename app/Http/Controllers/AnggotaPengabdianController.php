@@ -11,6 +11,7 @@ use App\User;
 use App\JenisPengajuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AnggotaPengabdianController extends Controller
 {
@@ -19,12 +20,11 @@ class AnggotaPengabdianController extends Controller
         $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->exists();
         if($var) {
             $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
-            $data['user'] = User::find(Auth::id());
-            $data['profile'] =  DB::table('users')->join('profils','profils.user_id','=','users.id')->where('profils.id','!=', Auth::id())->select('users.name', 'profils.id')->get();
-//            $data['profile'] = Profile::with('users');
+            $data['ketua'] = Profile::where('user_id',Auth::id())->first();
+            $data['profile'] =  Profile::where('user_id','!=',Auth::id())->get();
             $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
             $data['mitra'] = Mitra::where('pengajuan_id',$id_pengajuan)->first();
-            $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->first();
+            $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->orderBy('created_at', 'desc')->first();
             return view('users/pengajuan_pengabdian/anggota_pengabdian.create', $data);
         } else {
             return redirect()->route('pengajuan_pengabdian.create')->with('alert-warning','Anda belum mengajukan Pengabdian Masyarakat');
@@ -42,7 +42,12 @@ class AnggotaPengabdianController extends Controller
                 'profil_id' => $anggotas,
             ];
         }
-        Anggota::insert($datas);
-        return view('users/daftar_pengajuan.index');
+        if(empty($datas)){
+            return view('users.pengajuan_pengabdian.anggota_pengabdian.create')->with('alert-danger','Harap mengisi seluruh anggota');
+        } else {
+            Anggota::insert($datas);
+            return redirect()->route('daftar_pengajuan.index');
+        }
+
     }
 }

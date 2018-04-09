@@ -25,8 +25,8 @@
                         <div class="form-group m-t-40 row">
                             <label for="nama-ketua" class="col-2 col-form-label">Nama Ketua</label>
                             <div class="col-10">
-                                <input disabled  class="form-control" type="text" placeholder="{{$users->name}}">
-                                <input  class="form-control" type="hidden" name="profil_id" value="{{$users->id}}">
+                                <input disabled  class="form-control" type="text" placeholder="{{$profile->name}}">
+                                <input  class="form-control" type="hidden" name="profil_id" value="{{$profile->id}}">
                             </div>
                         </div>
                         <div class="form-group row">

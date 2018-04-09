@@ -30,7 +30,8 @@ Route::prefix('admin')->group(function (){
     Route::get('/disetujui','PersetujuanController@disetujui');
     Route::get('/ditolak', 'PersetujuanController@ditolak');
     Route::get('/direvisi','PersetujuanController@direvisi');
-//    Route::post('/pengajuan/daftar_pengajuan','PersetujuanController@update')->name('pengajuan.daftar_pengajuan.update');
+    Route::resource('/waktu_pengajuan','WaktuPengajuanController');
+    Route::resource('/file','FileAdminController');
 });
 
 Route::prefix('users')->group(function(){
@@ -40,5 +41,11 @@ Route::prefix('users')->group(function(){
     Route::resource('/daftar_pengajuan', 'DaftarPengajuanController');
     Route::resource('/pengajuan_penelitian/anggota_penelitian','AnggotaPenelitianController');
     Route::resource('/pengajuan_pengabdian/anggota_pengabdian','AnggotaPengabdianController');
+//    Route::post('/profil/{id}/edit/getProdi/{idProdi}', 'ProfileController@getProdis{idProdi}');
+    route::get('/profil/getProdi/{id}','ProfileController@getProdis');
+    Route::get('/download','DownloadFileController@index');
+    Route::get('/sedang_berjalan','PPMSedangBerjalan@index');
+
+
 });
 //Route::resource('admin/post','PostAdminController');

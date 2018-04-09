@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Jurusan;
 use App\Prodi;
+use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
+use JavaScript;
 
 class ProfileController extends Controller
 {
@@ -37,7 +40,9 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        return view('users/profil.create');
+        $data['jurusan'] = Jurusan::all();
+        $data['prodi'] = Prodi::all();
+        return view('users/profil.create', $data);
     }
 
     /**
@@ -50,7 +55,16 @@ class ProfileController extends Controller
     {
         $data = new Profile();
         $data->user_id = Auth::id();
-        $data->niph = $request->niph;
+        $data->niph = $request->get('niph');
+        $data->name = $request->get('name');
+        $nm = $request->get('niph');
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $ext = $avatar->getClientOriginalExtension();
+            $newName = Time().'.'.$nm.'.'.$ext;
+            Image::make($avatar)->resize(150,150)->save(public_path('uploads/avatar/'.$newName));
+            $data->avatar = $newName;
+        }
         $data->pangkat = $request->get('pangkat');
         $data->jabatan = $request->get('jabatan');
         $data->jurusan_id = $request->get('jurusan');
@@ -81,6 +95,7 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
+
         $data['users'] = User::find($id);
         $data['jurusan'] = Jurusan::all();
         $data['prodi'] = Prodi::all();
@@ -102,14 +117,22 @@ class ProfileController extends Controller
         $data->niph = $request->get('niph');
         $data->pangkat = $request->get('pangkat');
         $data->jabatan = $request->get('jabatan');
-        $data->jurusan_id = $request->get('jurusan_id');
-        $data->prodi_id = $request->get('prodi_id');
+        $data->jurusan_id = $request->get('jurusan');
+        $data->prodi_id = $request->get('prodi');
         $data->lab = $request->get('lab');
         $data->alamat = $request->get('alamat');
         $data->no_telp = $request->get('no_telp');
-        $data->avatar = $request->get('avatar');
+
+        $nm = $request->get('niph');
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $ext = $avatar->getClientOriginalExtension();
+            $newName = Time().'.'.$nm.'.'.$ext;
+            Image::make($avatar)->resize(150,150)->save(public_path('uploads/avatar/'.$newName));
+            $data->avatar = $newName;
+        }
         $data->save();
-        return redirect('/profil');
+        return redirect('users/profil');
     }
 
     /**
@@ -121,5 +144,10 @@ class ProfileController extends Controller
     public function destroy(Profile $profile)
     {
         //
+    }
+
+    public function getProdis($id) {
+        $prodis = DB::table("prodis")->where("jurusan_id",$id)->pluck("nama_prodi","id");
+        return json_encode($prodis);
     }
 }
