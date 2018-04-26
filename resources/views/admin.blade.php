@@ -9,11 +9,11 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/ui/assets/images/favicon.png') }}">
     <title>Sistem Informasi Penelitian dan Pengabdian Masyarakat</title>
+    @yield('styles')
     <link href="{{ asset('/ui/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/colors/blue.css') }}" id="theme" rel="stylesheet">
     <link href="{{asset('css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/dropify.min.css')}}" rel="stylesheet">
 </head>
 
     <body class="fix-header fix-sidebar card-no-border">
@@ -55,12 +55,9 @@
     <script src="{{ asset('/ui/lite version/js/sidebarmenu.js') }}"></script>
     <script src="{{ asset('/ui/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js') }}"></script>
     <script src="{{ asset('/ui/lite version/js/custom.min.js') }}"></script>
-    <script src="{{ asset('/ui/assets/plugins/flot/jquery.flot.js') }}"></script>
-    <script src="{{ asset('/ui/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js') }}/"></script>
-    <script src="{{ asset('/ui/lite version/js/flot-data.js') }}"></script>
     <script src="{{ asset('js/datepicker.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap-clockpicker.min.js') }}"></script>
-    <script src="{{ asset('js/dropify.min.js')}}"></script>
+    @yield('javascripts')
 
     <script>
         $(document).ready(function(){
@@ -68,7 +65,7 @@
         });
     </script>
 
-    <script type="text/javascript" src="{{asset('/js/custom.js')}} "></script>
+    {{--<script type="text/javascript" src="{{asset('/js/custom.js')}} "></script>--}}
     </body>
 
 </html>

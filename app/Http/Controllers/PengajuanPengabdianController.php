@@ -12,6 +12,8 @@ use App\Mitra;
 use App\Profile;
 use App\WaktuPengajuan;
 use Carbon\Carbon;
+use App\Anggota;
+
 class PengajuanPengabdianController extends Controller
 {
     /**
@@ -19,14 +21,6 @@ class PengajuanPengabdianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $user      = User::find(Auth::id());
-        $profils  = $user->profils;
-        $profilsId = $profils->id;
-        $data['pengajuan'] = Pengajuan::where('profil_id',$profilsId)->first();
-//        $data = Pengajuan::where('profil_id','2')->first();
-        return view('users/daftar_pengajuan.index', $data);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -44,22 +38,37 @@ class PengajuanPengabdianController extends Controller
         $tanggal_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->tanggal_tutup;
         $waktu_tutup = WaktuPengajuan::orderBy('created_at', 'desc')->first()->waktu_tutup;
 
-
         $buka = date('Y-m-d H:i:s', strtotime("$tanggal_buka $waktu_buka"));
         $tutup = date('Y-m-d H:i:s', strtotime("$tanggal_tutup $waktu_tutup"));
         $buka_carbon = Carbon::parse($buka);
         $tutup_carbon = Carbon::parse($tutup);
         $sekarang = Carbon::now();
-        if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
+        if($sekarang->lt($buka_carbon)){
             return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
+        elseif ( $sekarang->gt($tutup_carbon)){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Telah lewat masa pengajuan');
         }
         if(Profile::where('user_id',Auth::id())->exists()){
             $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->doesntExist();
-            if($var) {
+            if($var){
+                $checker = FALSE;
+            } else {
+                $cek = Pengajuan::where('profil_id',Auth::id())->where('jenis_pengajuan_id',2)->orderBy('created_at','desc')->first()->created_at;
+                $cek_periode = Carbon::parse($cek);
+                $checker = $cek_periode->lt($buka_carbon);
+            }
+            if(($var == FALSE) && ($checker == FALSE)){
+                $bool = TRUE;
+            } else {
+                $bool = FALSE;
+            }
+            if($bool == FALSE) {
                 $id = Auth::id();
                 $data['users'] = User::find($id);
                 $data['profile'] = Profile::where('user_id',$id)->first();
                 $data['jenis_p'] = JenisPengajuan::where('id', '2')->first();
+                $data['waktu'] = WaktuPengajuan::orderBy('created_at','desc')->first();
                 //$data = PengajuanPenelitian::with('profils')->get();
                 return view('users/pengajuan_pengabdian.create', $data);
             } else {
@@ -98,6 +107,7 @@ class PengajuanPengabdianController extends Controller
         $data->total_dana = $request->total_dana;
         $data->dana_pribadi = $request->dana_pribadi;
         $data->dana_lain = $request->dana_lain;
+        $data->waktu_pengajuan_id = $request->waktu_pengajuan_id;
 
         $rules = [
             "proposal" => "required|mimes:pdf|max:2048"
@@ -133,9 +143,16 @@ class PengajuanPengabdianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function show(Pengajuan $pengajuan)
+    public function show($id)
     {
-        //
+        $data['pengajuan'] = Pengajuan::find($id);
+        $id_ketua = Pengajuan::find($id)->profil_id;
+        $data['ketua'] = Profile::find($id_ketua);
+        $id_anggota = Anggota::where('pengajuan_id',$id)->pluck('profil_id');
+        $data['profile'] = Profile::whereIn('id', $id_anggota)->get();
+        $data['mitra'] = Mitra::where('pengajuan_id',$id)->first();
+
+        return view('users.pengajuan_pengabdian.show', $data);
     }
 
     /**
@@ -144,9 +161,11 @@ class PengajuanPengabdianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pengajuan $pengajuan)
+    public function edit($id)
     {
-        //
+        $data['pengajuans'] = Pengajuan::where('id',$id)->first();
+        $data['mitras'] = Mitra::where('pengajuan_id',$id)->first();
+        return view('users/pengajuan_pengabdian.edit',$data);
     }
 
     /**
@@ -156,9 +175,41 @@ class PengajuanPengabdianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pengajuan $pengajuan)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Pengajuan::where('id',$id)->first();
+        $data->judul_penelitian = $request->judul_penelitian;
+        $data->abstrak = $request->abstrak;
+        $data->jumlah_lab = $request->jumlah_lab;
+        $data->jumlah_mhs = $request->jumlah_mhs;
+        $data->no_telp = $request->no_telp;
+        $data->total_dana = $request->total_dana;
+        $data->dana_pribadi = $request->dana_pribadi;
+        $data->dana_lain = $request->dana_lain;
+
+        $rules = [
+            "proposal" => "required|mimes:pdf|max:2048"
+        ];
+        $this->validate($request, $rules);
+
+        $jp = $request->judul_penelitian;
+
+        $proposal = $request->file('proposal');
+        $ext = $proposal->getClientOriginalExtension();
+        $newName = "Proposal_Pengabdian_".$jp.".".$ext;
+        $proposal->move('uploads/file',$newName);
+        $data->proposal = $newName;
+        $data->save();
+
+        if($request->nama_mitra != NULL){
+            $mitra = Mitra::where('pengajuan_id',$id)->first();
+            $mitra->nama_mitra = $request->nama_mitra;
+            $mitra->cp_mitra = $request->cp_mitra;
+            $mitra->jabatan_mitra = $request->jabatan_mitra;
+            $mitra->alamat_mitra = $request->alamat_mitra;
+            $mitra->telp_mitra = $request->telp_mitra;
+            $mitra->save();
+        }
     }
 
     /**
@@ -167,8 +218,27 @@ class PengajuanPengabdianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pengajuan $pengajuan)
+    public function destroy($id)
     {
-        //
+        if(Pengajuan::where('id',$id)->where('persetujuan_id',1)->exists())
+        {
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Data tidak dapat dihapus!');
+        } else {
+            if(Mitra::where('pengajuan_id',$id)->exists())
+            {
+                $mitra = Mitra::where('pengajuan_id',$id)->first();
+                $mitra->delete();
+            }
+
+            if(Anggota::where('pengajuan_id', $id)->exists())
+            {
+                $anggota = Anggota::where('pengajuan_id',$id);
+                $anggota->delete();
+            }
+
+            $pengajuan = Pengajuan::where('id',$id)->first();
+            $pengajuan->delete();
+            return redirect()->route('daftar_pengajuan.index')->with('alert-success','Data berhasi dihapus!');
+        }
     }
 }

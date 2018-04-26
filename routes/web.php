@@ -18,34 +18,111 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::get('/home', 'PostController@index')->name('home');
+Route::get('/home', 'PostController@index',['middleware' => 'auth']);
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::prefix('admin')->group(function (){
-    Route::get('/login', '\App\Http\Controllers\Auth\AdminLoginController@showLoginForm')->name('admin.login');
-    Route::post('/login', '\App\Http\Controllers\Auth\AdminLoginController@login')->name('admin.login.submit');
-    Route::get('/', 'AdminController@index')->name('admin.dashboard');
-    Route::resource('/post','PostAdminController');
-    Route::resource('/persetujuan','PersetujuanController');
-    Route::get('/disetujui','PersetujuanController@disetujui');
-    Route::get('/ditolak', 'PersetujuanController@ditolak');
-    Route::get('/direvisi','PersetujuanController@direvisi');
-    Route::resource('/waktu_pengajuan','WaktuPengajuanController');
-    Route::resource('/file','FileAdminController');
+    Route::middleware(['admin'])->group(function (){
+        Route::get('/', 'AdminController@index')->name('admin.dashboard');
+        Route::resource('/post','PostAdminController');
+        Route::resource('/persetujuan','PersetujuanController');
+        Route::get('/daftar-publikasi','PersetujuanController@indexPenelitian')->name('admin.index.publikasi');
+        Route::get('/daftar-pengabdian', 'PersetujuanController@indexPengabdian')->name('admin.index.pengabdian');
+        Route::get('/revisi','PersetujuanController@revisi');
+        Route::get('/sedang_berjalan', 'PPMSedangBerjalan@indexAdmin')->name('admin.sedang_berjalan');
+        Route::get('/daftar_riwayat','RiwayatPenelitianController@indexAdmin')->name('admin.riwayat');
+        Route::resource('/waktu_pengajuan','WaktuPengajuanController');
+        Route::resource('/file','FileAdminController');
+    });
+    Route::middleware(['web'])->group(function (){
+        Route::get('/login', '\App\Http\Controllers\Auth\AdminLoginController@showLoginForm')->name('admin.login');
+        Route::post('/login', '\App\Http\Controllers\Auth\AdminLoginController@login')->name('admin.login.submit');
+    });
 });
 
 Route::prefix('users')->group(function(){
-    Route::resource('/profil','ProfileController');
-    Route::resource('/pengajuan_penelitian','PengajuanPenelitianController');
-    Route::resource('/pengajuan_pengabdian','PengajuanPengabdianController');
-    Route::resource('/daftar_pengajuan', 'DaftarPengajuanController');
-    Route::resource('/pengajuan_penelitian/anggota_penelitian','AnggotaPenelitianController');
-    Route::resource('/pengajuan_pengabdian/anggota_pengabdian','AnggotaPengabdianController');
-//    Route::post('/profil/{id}/edit/getProdi/{idProdi}', 'ProfileController@getProdis{idProdi}');
-    route::get('/profil/getProdi/{id}','ProfileController@getProdis');
-    Route::get('/download','DownloadFileController@index');
-    Route::get('/sedang_berjalan','PPMSedangBerjalan@index');
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('/profil','ProfileController');
+        Route::resource('/pengajuan_penelitian','PengajuanPenelitianController');
+        Route::resource('/pengajuan_pengabdian','PengajuanPengabdianController');
+        Route::resource('/daftar_pengajuan', 'DaftarPengajuanController');
+        Route::resource('/pengajuan_penelitian/anggota_penelitian','AnggotaPenelitianController');
+        Route::resource('/pengajuan_pengabdian/anggota_pengabdian','AnggotaPengabdianController');
+        Route::resource('/riwayat', 'RiwayatPenelitianController');
+//        Route::resource('/sedang_berjalan/luaran','LuaranController');
+        Route::get('/gantiPassword','HomeController@gantiPasswordIndex');
+        Route::get('/daftar_luaran','LuaranController@index');
+        route::get('/profil/getProdi/{id}','ProfileController@getProdis');
+        Route::get('/download','DownloadFileController@index');
+        Route::get('/sedang_berjalan','PPMSedangBerjalan@index')->name('sedang_berjalan.index');
+        Route::get('/sedang_berjalan/luaran/{id}', [
+            'as' => 'luaran.create',
+            'uses' => 'LuaranController@create'
+        ]);
+        Route::get('/sedang_berjalan/luaran/publikasi/{id}', [
+            'as' => 'publikasi.create',
+            'uses' => 'LuaranController@createPublikasi'
+        ]);
+        Route::get('/sedang_berjalan/luaran/publikasi/{id}/show', [
+            'as' => 'publikasi.show',
+            'uses' => 'LuaranController@showPublikasi'
+        ]);
+        Route::get('/sedang_berjalan/luaran/pertemuan/{id}', [
+            'as' => 'pertemuan.create',
+            'uses' => 'LuaranController@createPertemuan'
+        ]);
+        Route::get('/sedang_berjalan/luaran/pertemuan/{id}/show', [
+            'as' => 'pertemuan.show',
+            'uses' => 'LuaranController@showPertemuan'
+        ]);
+
+        Route::get('/sedang_berjalan/luaran/haki/{id}/show', [
+            'as' => 'haki.show',
+            'uses' => 'LuaranController@showHaki'
+        ]);
+        Route::get('/sedang_berjalan/luaran/haki/{id}', [
+            'as' => 'haki.create',
+            'uses' => 'LuaranController@createHaki'
+        ]);
+        Route::get('/sedang_berjalan/luaran/prototype/{id}/show', [
+            'as' => 'prototype.show',
+            'uses' => 'LuaranController@showPrototype'
+        ]);
+        Route::get('/sedang_berjalan/luaran/prototype/{id}', [
+            'as' => 'prototype.create',
+            'uses' => 'LuaranController@createPrototype'
+        ]);
+
+        Route::get('/riwayat/publikasi/tambah',[
+            'as' => 'riwayat.publikasi.create',
+            'uses' => 'RiwayatPenelitianController@createPublikasi'
+        ]);
+        Route::get('/riwayat/pertemuan/tambah',[
+            'as' => 'riwayat.pertemuan.create',
+            'uses' => 'RiwayatPenelitianController@createPertemuan'
+        ]);
+
+        Route::post('/gantiPassword','HomeController@gantiPassword')->name('gantiPassword');
+        Route::post('','LuaranController@store')->name('luaran.store');
+        Route::post('/sedang_berjalan/luaran/publikasi/{id}','LuaranController@storePublikasi')->name('luaran.publikasi.store');
+        Route::post('/sedang_berjalan/luaran/pertemuan/{id}','LuaranController@storePertemuan')->name('luaran.pertemuan.store');
+        Route::post('/sedang_berjalan/luaran/haki/{id}','LuaranController@storeHaki')->name('luaran.haki.store');
+        Route::post('/sedang_berjalan/luaran/prototype/{id}','LuaranController@storePrototype')->name('luaran.prototype.store');
+        Route::post('/riwayat/publikasi/tambah','RiwayatPenelitianController@storePublikasi')->name('riwayat.publikasi.store');
+        Route::post('/riwayat/pertemuan/tambah','RiwayatPenelitianController@storePertemuan')->name('riwayat.pertemuan.store');
+        Route::post('/sedang_berjalan/kelengkapan/store','KelengkapanController@store')->name('kelengkapan.store');
+//        Route::put('/sedang_berjalan/luaran','LuaranController@update')->name('luaran.update');
+        Route::match(array('PUT', 'PATCH'), "/sedang_berjalan/luaran/{id}", array(
+            'uses' => 'LuaranController@update',
+            'as' => 'luaran.update'
+        ));
+        Route::match(array('PUT', 'PATCH'), "/sedang_berjalan/kelengkapan/{id}", array(
+            'uses' => 'KelengkapanController@update',
+            'as' => 'kelengkapan.update'
+        ));
+
+    });
+
 
 
 });
-//Route::resource('admin/post','PostAdminController');

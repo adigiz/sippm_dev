@@ -9,12 +9,12 @@ class WaktuPengajuanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin');
+        $this->middleware('admin');
     }
     public function index()
     {
-        $data = WaktuPengajuan::all();
-        return view('admin/waktu_pengajuan.index',compact('data'));
+        $data = WaktuPengajuan::orderBy('created_at', 'desc')->get();
+        return view('admin.waktu_pengajuan.index',compact('data'));
     }
 
     public function create()

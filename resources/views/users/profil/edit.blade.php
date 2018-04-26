@@ -16,7 +16,8 @@
                         {{--<label class="btn btn-info text-center">--}}
                             {{--Upload Foto <input type="file" name="avatar" hidden>--}}
                         {{--</label>--}}
-                        <h6 class="card-subtitle">{{$users->email}}</h6>
+                        <br>
+                        <h4 class="card-title">{{$users->email}}</h4>
 
                     </center>
                 </div>

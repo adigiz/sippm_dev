@@ -32,7 +32,7 @@ class AnggotaController extends Controller
             //$data = PengajuanPenelitian::with('profils')->get();
             return view('users/pengajuan_penelitian.create', $data);
         } else {
-            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan publikasi sebagai ketua');
         }
     }
 

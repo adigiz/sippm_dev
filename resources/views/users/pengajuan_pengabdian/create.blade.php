@@ -19,44 +19,45 @@
                             <label for="jenis-pengajuan" class="col-2 col-form-label">Jenis Pengajuan</label>
                             <div class="col-10">
                                 <input disabled  class="form-control" type="text" placeholder="{{$jenis_p->nama_jenis}}">
-                                <input  class="form-control" type="hidden" name="jenis_pengajuan_id" value="{{$jenis_p->id}}">
+                                <input required class="form-control" type="hidden" name="jenis_pengajuan_id" value="{{$jenis_p->id}}">
                             </div>
                         </div>
                         <div class="form-group m-t-40 row">
                             <label for="nama-ketua" class="col-2 col-form-label">Nama Ketua</label>
                             <div class="col-10">
                                 <input disabled  class="form-control" type="text" placeholder="{{$profile->name}}">
-                                <input  class="form-control" type="hidden" name="profil_id" value="{{$profile->id}}">
+                                <input required class="form-control" type="hidden" name="profil_id" value="{{$profile->id}}">
                             </div>
                         </div>
+                        <input required class="form-control" type="hidden" name="waktu_pengajuan_id" value="{{$waktu->id}}">
                         <div class="form-group row">
                             <label for="abstrak" class="col-2 col-form-label">Abstrak</label>
                             <div class="col-10">
-                                <textarea class="form-control" name="abstrak" rows="8" required></textarea>
+                                <textarea  class="form-control" name="abstrak" rows="8" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">Jumlah Anggota</label>
                             <div class="col-10">
-                                <input class="form-control" type="number" name="jumlah_anggota" required>
+                                <input class="form-control" type="number" min="1" name="jumlah_anggota" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml lab" class="col-2 col-form-label">Jumlah Lab</label>
                             <div class="col-10">
-                                <input class="form-control" type="number"  name="jumlah_lab" required >
+                                <input class="form-control" type="number"  min="0" name="jumlah_lab" required >
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml-mhs" class="col-2 col-form-label">Jumlah Mahasiswa</label>
                             <div class="col-10">
-                                <input class="form-control" type="number"  name="jumlah_mhs">
+                                <input required class="form-control" type="number"  min="0" name="jumlah_mhs">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="no-telp" class="col-2 col-form-label">No Telpon</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="no_telp">
+                                <input required class="form-control" type="text"  name="no_telp">
                             </div>
                         </div>
                         <hr>
@@ -70,31 +71,31 @@
                         <div class="form-group row" id="mitra" style="display:none">
                             <label for="nama-mitra" class="col-2 col-form-label">Nama Mitra</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="nama_mitra">
+                                <input required class="form-control" type="text"  name="nama_mitra">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra2" style="display:none">
                             <label for="cp-mitra" class="col-2 col-form-label">Contact Person</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="cp_mitra">
+                                <input required class="form-control" type="text"  name="cp_mitra">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra3" style="display:none">
                             <label for="jabatan-mitra" class="col-2 col-form-label">Jabatan</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="jabatan_mitra">
+                                <input required class="form-control" type="text"  name="jabatan_mitra">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra4" style="display:none">
                             <label for="alamat-mitra" class="col-2 col-form-label">Alamat</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="alamat_mitra">
+                                <input required class="form-control" type="text"  name="alamat_mitra">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra5" style="display:none">
                             <label for="telp-mitra" class="col-2 col-form-label">No Telfon</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="telp_mitra">
+                                <input required class="form-control" type="text"  name="telp_mitra">
                             </div>
                         </div>
                         <hr>
@@ -102,25 +103,25 @@
                         <div class="form-group row">
                             <label for="total_dana" class="col-2 col-form-label">Total Dana yang Dibutuhkan</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="total_dana">
+                                <input required class="form-control" type="text"  name="total_dana">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-pribadi" class="col-2 col-form-label">Dana Pribadi</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="dana_pribadi">
+                                <input required class="form-control" type="text"  name="dana_pribadi">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-lain" class="col-2 col-form-label">Dana Lain</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="dana_lain">
+                                <input required class="form-control" type="text"  name="dana_lain">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="upload" class="col-2 col-form-label">Upload Proposal</label>
                             <div class="col-10">
-                                <input class="form-control" type="file"  name="proposal">
+                                <input required class="form-control" type="file"  name="proposal">
                             </div>
                         </div>
                         <div class="form-group">

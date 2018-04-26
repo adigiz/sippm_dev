@@ -7,12 +7,11 @@
                 </li>
 
                 <li>
-                    <a href="table-basic.html" class="waves-effect"><i class="fa fa-table m-r-10" aria-hidden="true"></i>Pengajuan</a>
+                    <a href="#" class="has-arrow waves-effect"><i class="fa fa-table m-r-10" aria-hidden="true"></i>Pengajuan</a>
                     <ul class="collapse">
                         <li><a href="{{ url('users/pengajuan_penelitian/create') }}">Penelitian</a></li>
                         <li><a href="{{ url('users/pengajuan_pengabdian/create') }}">Pengabdian</a></li>
-                        <li><a href="{{url('users/daftar_pengajuan')}}">Daftar Pengajuan</a></li>
-                        <li><a href="#">Log Harian</a></li>
+                        <li><a href="{{ url('users/daftar_pengajuan')}}">Daftar Pengajuan</a></li>
                     </ul>
                 </li>
                 <li>
@@ -22,17 +21,17 @@
                     <a href="{{ url('users/download') }}" class="waves-effect"><i class="fa fa-download m-r-10" aria-hidden="true"></i>Download</a>
                 </li>
                 <li>
-                    <a href="#" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Profil</a>
-                    <ul class="collapse">
-                        <li><a href="{{ url('users/profil') }}">Halaman Profil</a></li>
-                        <li><a href="#">Penelitian Terdahulu</a></li>
+                    <a href="{{ url('users/profil') }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true" data-toggle="collapse" data-target="#profile"></i>Profil</a></li>
+                </li>
+                <li>
+                    <a  class="has-arrow waves-effect"><i class="fa fa-history m-r-10" aria-hidden="true"></i>Riwayat Penelitian</a>
+                    <ul id="profile" class="collapse">
+                        <li><a href="{{ url('users/riwayat') }}">Daftar Riwayat</a></li>
+                        <li><a href="{{ route('riwayat.publikasi.create') }}">Tambah Publikasi</a></li>
+                        <li><a href="{{ route('riwayat.pertemuan.create') }}">Tambah Pertemuan</a></li>
                     </ul>
                 </li>
-
             </ul>
-
         </nav>
-        <!-- End Sidebar navigation -->
     </div>
-    <!-- End Sidebar scroll-->
 </aside>

@@ -42,7 +42,7 @@
                         <p class="text-muted">{{$profile->jurusans['nama_jurusan']}}</p>
                         <strong>Program Studi</strong>
                         <br>
-                        <p class="text-muted">{{$profile->prodis['nama_prodis']}}</p>
+                        <p class="text-muted">{{$profile->prodis['nama_prodi']}}</p>
                         <strong>Lab</strong>
                         <br>
                         <p class="text-muted">{{$profile->lab}}</p>

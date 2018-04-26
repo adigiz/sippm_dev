@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Pengajuan;
 use App\Persetujuan;
+use App\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PersetujuanController extends Controller
 {
@@ -15,8 +17,29 @@ class PersetujuanController extends Controller
      */
     public function index()
     {
-        $data['pengajuan'] = Pengajuan::all();
+        $data['pengajuans'] = DB::table('profils')
+            ->join('pengajuans', 'profils.id', '=', 'pengajuans.profil_id')
+            ->select('pengajuans.id','profils.name', 'pengajuans.judul_penelitian', 'pengajuans.jenis_pengajuan_id','pengajuans.total_dana','pengajuans.persetujuan_id','pengajuans.proposal','pengajuans.waktu_pengajuan_id','pengajuans.created_at')
+            ->get();
         return view('admin.pengajuan.daftar_pengajuan.index', $data);
+    }
+    public function indexPenelitian()
+    {
+        $data['pengajuans'] = DB::table('profils')
+            ->join('pengajuans', 'profils.id', '=', 'pengajuans.profil_id')
+            ->select('pengajuans.id','profils.name', 'pengajuans.judul_penelitian', 'pengajuans.jenis_pengajuan_id','pengajuans.total_dana','pengajuans.persetujuan_id','pengajuans.proposal','pengajuans.waktu_pengajuan_id','pengajuans.created_at')
+            ->where('pengajuans.jenis_pengajuan_id',1)
+            ->get();
+        return view('admin.pengajuan.publikasi.index', $data);
+    }
+    public function indexPengabdian()
+    {
+        $data['pengajuans'] = DB::table('profils')
+            ->join('pengajuans', 'profils.id', '=', 'pengajuans.profil_id')
+            ->select('pengajuans.id','profils.name', 'pengajuans.judul_penelitian', 'pengajuans.jenis_pengajuan_id','pengajuans.total_dana','pengajuans.persetujuan_id','pengajuans.proposal','pengajuans.waktu_pengajuan_id','pengajuans.created_at')
+            ->where('pengajuans.jenis_pengajuan_id',2)
+            ->get();
+        return view('admin.pengajuan.pengabdian.index', $data);
     }
 
     /**
@@ -76,11 +99,11 @@ class PersetujuanController extends Controller
         $data->save();
         $id_persetujuan = $request->persetujuan_id;
         if($id_persetujuan == '1'){
-            return redirect()->route('persetujuan.index')->with('alert-success','Pengajuan disetujui');
+            return redirect()->route('persetujuan.index')->with('alert-success','Pengajuan publikasi');
         } elseif ($id_persetujuan == '2'){
             return redirect()->route('persetujuan.index')->with('alert-warning','Pengajuan direvisi');
         } else {
-            return redirect()->route('persetujuan.index')->with('alert-danger','Pengajuan ditolak');
+            return redirect()->route('persetujuan.index')->with('alert-danger','Pengajuan pengabdian');
         }
 
     }
@@ -98,12 +121,12 @@ class PersetujuanController extends Controller
 
     public function disetujui(){
         $data['pengajuan'] = Pengajuan::where('persetujuan_id',1)->get();
-        return view('admin.pengajuan.disetujui.index', $data);
+        return view('admin.pengajuan.publikasi.index', $data);
     }
 
-    public function tolak(){
+    public function ditolak(){
         $data['pengajuan'] = Pengajuan::where('persetujuan_id',3);
-        return view('admin.pengajuan.ditolak.index', $data);
+        return view('admin.pengajuan.pengabdian.index', $data);
     }
 
     public function belumDiPeriksa(){
@@ -113,6 +136,6 @@ class PersetujuanController extends Controller
 
     public function revisi(){
         $data['pengajuan'] = Pengajuan::where('persetujuan_id',2);
-        return view('admin.pengajuan.direvisi.index', $data);
+        return view('admin.pengajuan.revisi.index', $data);
     }
 }

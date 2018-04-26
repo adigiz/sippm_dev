@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Profile;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Console\Helper\Table;
-use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 class PengajuanPenelitianController extends Controller
@@ -39,6 +37,7 @@ class PengajuanPenelitianController extends Controller
         $buka_carbon = Carbon::parse($buka);
         $tutup_carbon = Carbon::parse($tutup);
         $sekarang = Carbon::now();
+
         if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
             return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
         }
@@ -67,24 +66,42 @@ class PengajuanPenelitianController extends Controller
         $buka_carbon = Carbon::parse($buka);
         $tutup_carbon = Carbon::parse($tutup);
         $sekarang = Carbon::now();
-        if($sekarang->lt($buka_carbon) || $sekarang->gt($tutup_carbon)){
+        if($sekarang->lt($buka_carbon)){
             return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
+        }
+        elseif ( $sekarang->gt($tutup_carbon)){
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Telah lewat masa pengajuan');
         }
 
         if(Profile::where('user_id',Auth::id())->exists()){
-            $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->doesntExist();
-            if($var) {
+            $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->doesntExist();
+            if($var){
+                $checker = FALSE;
+            } else {
+                $cek = Pengajuan::where('profil_id',Auth::id())->where('jenis_pengajuan_id',1)->orderBy('created_at','desc')->first()->created_at;
+                $cek_periode = Carbon::parse($cek);
+                $checker = $cek_periode->lt($buka_carbon);
+            }
+//
+
+            if(($var == FALSE) && ($checker == FALSE)){
+                $bool = TRUE;
+            } else {
+                $bool = FALSE;
+            }
+            if($bool == FALSE) {
                 $id = Auth::id();
                 $data['users'] = User::find($id);
                 $data['profile'] = Profile::where('user_id',$id)->first();
                 $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+                $data['waktu'] = WaktuPengajuan::orderBy('created_at','desc')->first();
                 //$data = PengajuanPenelitian::with('profils')->get();
                 return view('users/pengajuan_penelitian.create', $data);
             } else {
                 $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
                 $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
                 if($check){
-                    return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan penelitian sebagai ketua');
+                    return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan publikasi sebagai ketua');
                 }
                 else {
                     return redirect()->route('anggota_penelitian.create')->with('alert-warning','Tambahkan Anggota');
@@ -117,8 +134,91 @@ class PengajuanPenelitianController extends Controller
         $data->total_dana = $request->total_dana;
         $data->dana_pribadi = $request->dana_pribadi;
         $data->dana_lain = $request->dana_lain;
+        $data->waktu_pengajuan_id = $request->waktu_pengajuan_id;
 
 
+
+        $rules = [
+            "proposal" => "required|mimes:pdf|max:2048"
+        ];
+        $this->validate($request, $rules);
+
+
+        $jp = $request->judul_penelitian;
+
+        $proposal = $request->file('proposal');
+        $ext = $proposal->getClientOriginalExtension();
+        $newName = "Proposal_Penelitian_".$jp.".".$ext;
+        $proposal->move('uploads/file',$newName);
+        $data->proposal = $newName;
+        $data->save();
+
+        if($request->nama_mitra != NULL){
+            $mitra = new Mitra();
+            $mitra->nama_mitra = $request->nama_mitra;
+            $mitra->cp_mitra = $request->cp_mitra;
+            $mitra->jabatan_mitra = $request->jabatan_mitra;
+            $mitra->alamat_mitra = $request->alamat_mitra;
+            $mitra->telp_mitra = $request->telp_mitra;
+            $pengajuan =  DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
+            $mitra->pengajuan_id = $pengajuan;
+            $mitra->save();
+        }
+
+//        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
+        return redirect()->route('anggota_penelitian.create')->with('alert-success','Tambahkan Anggota');
+    }
+
+    /**Pengajuan::select('id')->where('profil_id',User::find(Auth::id()))->where('jenis_pengajuan_id',1);
+     * Display the specified resource.
+     *
+     * @param  \App\Pengajuan  $pengajuan
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $data['pengajuan'] = Pengajuan::find($id);
+        $id_ketua = Pengajuan::find($id)->profil_id;
+        $data['ketua'] = Profile::find($id_ketua);
+        $id_anggota = Anggota::where('pengajuan_id',$id)->pluck('profil_id');
+        $data['profile'] = Profile::whereIn('id', $id_anggota)->get();
+        $data['mitra'] = Mitra::where('pengajuan_id',$id)->first();
+
+
+        return view('users.pengajuan_penelitian.show', $data);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Pengajuan  $pengajuan
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $data['pengajuans'] = Pengajuan::where('id',$id)->first();
+        $data['mitras'] = Mitra::where('pengajuan_id',$id)->first();
+        return view('users/pengajuan_penelitian.edit',$data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Pengajuan  $pengajuan
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $data = Pengajuan::where('id',$id)->first();
+        $data->judul_penelitian = $request->judul_penelitian;
+        $data->abstrak = $request->abstrak;
+        $data->jumlah_lab = $request->jumlah_lab;
+        $data->jumlah_mhs = $request->jumlah_mhs;
+        $data->no_telp = $request->no_telp;
+        $data->total_dana = $request->total_dana;
+        $data->dana_pribadi = $request->dana_pribadi;
+        $data->dana_lain = $request->dana_lain;
 
         $rules = [
             "proposal" => "required|mimes:pdf|max:2048"
@@ -134,63 +234,15 @@ class PengajuanPenelitianController extends Controller
         $data->proposal = $newName;
         $data->save();
 
-        $mitra = new Mitra();
-        $mitra->nama_mitra = $request->nama_mitra;
-        $mitra->cp_mitra = $request->cp_mitra;
-        $mitra->jabatan_mitra = $request->jabatan_mitra;
-        $mitra->alamat_mitra = $request->alamat_mitra;
-        $mitra->telp_mitra = $request->telp_mitra;
-        $pengajuan =  DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
-        $mitra->pengajuan_id = $pengajuan;
-        $mitra->save();
-//        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
-        return redirect()->route('anggota_penelitian.create')->with('alert-success','Tambahkan Anggota');
-    }
-
-    /**Pengajuan::select('id')->where('profil_id',User::find(Auth::id()))->where('jenis_pengajuan_id',1);
-     * Display the specified resource.
-     *
-     * @param  \App\Pengajuan  $pengajuan
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $data['pengajuan'] = Pengajuan::find($id);
-        $id_ketua = Pengajuan::find($id)->profil_id;
-        $id_profil_ketua = Profile::find($id_ketua)->user_id;
-        $data['users'] = User::find($id_profil_ketua);
-        $data['profile'] =  DB::table('users')
-            ->join('profils','profils.user_id','=','users.id')
-            ->join('pengajuans','pengajuans.profil_id','=','profils.id')
-            ->join('anggotas','anggotas.pengajuan_id','=','pengajuans.id')
-            ->where('anggotas.pengajuan_id','==', $id)
-            ->select('users.name')->get();
-
-
-        return view('users.pengajuan_penelitian.show', $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pengajuan  $pengajuan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pengajuan $pengajuan)
-    {
-        return view('users/pengajuan_penelitian.edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pengajuan  $pengajuan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pengajuan $pengajuan)
-    {
-        //
+        if($request->nama_mitra != NULL){
+            $mitra = Mitra::where('pengajuan_id',$id)->first();
+            $mitra->nama_mitra = $request->nama_mitra;
+            $mitra->cp_mitra = $request->cp_mitra;
+            $mitra->jabatan_mitra = $request->jabatan_mitra;
+            $mitra->alamat_mitra = $request->alamat_mitra;
+            $mitra->telp_mitra = $request->telp_mitra;
+            $mitra->save();
+        }
     }
 
     /**
@@ -199,8 +251,28 @@ class PengajuanPenelitianController extends Controller
      * @param  \App\Pengajuan  $pengajuan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pengajuan $pengajuan)
+    public function destroy($id)
     {
-        //
+        if(Pengajuan::where('pengajuan_id',$id)->where('persetujuan_id',1)->exists())
+        {
+            return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Data tidak dapat dihapus!');
+        } else {
+            if(Mitra::where('pengajuan_id',$id)->exists())
+            {
+                $mitra = Mitra::where('pengajuan_id',$id)->first();
+                $mitra->delete();
+            }
+
+            if(Anggota::where('pengajuan_id', $id)->exists())
+            {
+                $anggota = Anggota::where('pengajuan_id',$id);
+                $anggota->delete();
+            }
+
+            $pengajuan = Pengajuan::where('id',$id)->first();
+            $pengajuan->delete();
+            return redirect()->route('daftar_pengajuan.index')->with('alert-success','Data berhasi dihapus!');
+        }
+
     }
 }

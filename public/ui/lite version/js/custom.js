@@ -162,6 +162,31 @@ $(function() {
 });
 
 $(function() {
-    $('.clockpicker').clockpicker();
+    $("#clockpicker").clockpicker();
+});
+
+$("#read").click(function() {
+
+    if($("#read").val()==0)
+    {
+        $("#read").val(1);
+    }
+    else
+    {
+        $("#read").val(0);
+    }
+
+});
+$("#read1").click(function() {
+
+    if($("#read1").val()==0)
+    {
+        $("#read1").val(1);
+    }
+    else
+    {
+        $("#read1").val(0);
+    }
+
 });
 

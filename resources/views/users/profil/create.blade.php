@@ -57,9 +57,8 @@
                                 <select class="custom-select col-12" id="jurusan" name="jurusan">
                                     <option value="">Pilih Jurusan</option>
                                     @foreach ($jurusan as $jurusans)
-                                        <option value="{{ $jurusans->id}}"> {{ $jurusans->nama_jurusan }}</option>
+                                        <option value="{{ $jurusans->id }}"> {{ $jurusans->nama_jurusan }}</option>
                                     @endforeach
-
                                 </select>
                             </div>
                         </div>

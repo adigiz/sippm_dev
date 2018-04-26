@@ -20,4 +20,9 @@ class Pengajuan extends Model
     {
         return $this->hasMany('App\Anggota');
     }
+
+    public function waktus()
+    {
+        return $this->belongsTo('App\WaktuPengajuan');
+    }
 }

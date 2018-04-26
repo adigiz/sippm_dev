@@ -14,6 +14,7 @@
     <link href="{{ asset('/ui/lite version/css/colors/blue.css') }}" id="theme" rel="stylesheet">
     <link href="{{ asset('/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/select2-bootstrap.css') }}" rel="stylesheet">
+    @yield('styles')
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -51,23 +52,20 @@
 <script src="{{ asset('/ui/assets/plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('/ui/assets/plugins/bootstrap/js/tether.min.js') }}"></script>
 <script src="{{ asset('/ui/assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{asset('js/select2.full.min.js')}}"></script>
+<script src="{{ asset('/js/select2.full.min.js')}}"></script>
 <script src="{{ asset('/ui/lite version/js/jquery.slimscroll.js') }}"></script>
 <script src="{{ asset('/ui/lite version/js/waves.js') }}"></script>
 <script src="{{ asset('/ui/lite version/js/sidebarmenu.js') }}"></script>
 <script src="{{ asset('/ui/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js') }}"></script>
 <script src="{{ asset('/ui/lite version/js/custom.min.js') }}"></script>
-<script src="{{ asset('/ui/assets/plugins/flot/jquery.flot.js') }}"></script>
-<script src="{{ asset('/ui/assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js') }}/"></script>
-<script src="{{ asset('/ui/lite version/js/flot-data.js') }}"></script>
-<script src="{{ asset('/ui/assets/plugins/styleswitcher/jQuery.style.switcher.js') }}"></script>
+@yield('javascripts')
 <script>
     $(document).ready(function(){
         $(".dropdown-toggle").dropdown();
     });
 </script>
 
-<script type="text/javascript" src="{{asset('/js/custom.js')}} "></script>
+{{--<script type="text/javascript" src="{{asset('/js/custom.js')}} "></script>--}}
 </body>
 
 </html>

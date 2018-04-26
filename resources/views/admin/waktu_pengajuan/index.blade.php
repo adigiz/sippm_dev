@@ -7,12 +7,21 @@
             <strong>{{ \Illuminate\Support\Facades\Session::get('alert-success') }}</strong>
         </div>
     @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="row">
         <div class="col-12 m-t-30">
             @foreach($data as $waktu)
                 <div class="card">
                     <div class="card-block">
-                        <h4 class="card-title">Periode Pengajuan ({{$waktu->tanggal_buka}} - {{$waktu->tanggal_tutup}})
+                        <h4 class="card-title">Periode Pengajuan ({{date('d/m/Y', strtotime($waktu->tanggal_buka))}} - {{date('d/m/y',strtotime($waktu->tanggal_tutup))}})
                             <br>
                             <small class="text-muted">Waktu buka : {{$waktu->waktu_buka}}</small>
                             <br>

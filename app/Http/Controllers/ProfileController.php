@@ -26,10 +26,11 @@ class ProfileController extends Controller
             $data['jurusan'] = Jurusan::all();
             $data['prodi'] = Prodi::all();
             $data['profile'] = Profile::find(Auth::id());
-//            return view('users/profil.index',compact('data'));
             return view('users/profil.index', $data);
         } else {
-            return view('users/profil.create');
+            $data['jurusan'] = Jurusan::all();
+            $data['prodi'] = Prodi::all();
+            return view('users/profil.create',$data);
         }
     }
 

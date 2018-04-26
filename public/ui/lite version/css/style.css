@@ -6641,7 +6641,19 @@ File: scss
         -webkit-flex-wrap: wrap !important; }
     .chat-list li .chat-content {
         width: calc(100% - 80px); } }
-.closebtn{margin-left: 15px;color: white;font-weight: bold;float: right;font-size: 22px;line-height: 25px;cursor: pointer;transition: 0.3s;} .closebtn:hover{color:black;}
+.closebtn {
+    margin-left: 15px;
+    color: black;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.closebtn:hover {
+    color:black;
+}
 
 .styled-checkbox {
     position: absolute;
@@ -6705,4 +6717,9 @@ File: scss
 
 .select2-selection {
     height: 34px !important;
+}
+
+div.datatable-wide {
+    padding-left: 5px;
+    padding-right: 15px;
 }
