@@ -1,6 +1,7 @@
 @extends('users.home')
 
 @section('title', 'Profil')
+@section('breadcrumb','Profil')
 @section('content')
 
     <div class="row">

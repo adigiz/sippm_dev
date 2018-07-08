@@ -1,6 +1,7 @@
 @extends('users.home')
 
 @section('title', 'Daftar Pengajuan')
+@section('breadcrumb','Daftar Pengajuan')
 @section('content')
     @if(\Illuminate\Support\Facades\Session::has('alert-warning'))
         <div class="alert alert-warning">
@@ -41,11 +42,16 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if(!$anggotas->contains('pengajuan_id',$pengajuan->id))
-                                            Belum lengkap
+                                        @if($pengajuan->profil_id == $profile->id)
+                                            @if(!$anggotas->contains('pengajuan_id',$pengajuan->id))
+                                                Belum lengkap
+                                            @else
+                                                Lengkap
+                                            @endif
                                         @else
                                             Lengkap
                                         @endif
+
                                     </td>
                                     <td>
                                         @if($pengajuan->profil_id == $profile->id)

@@ -1,6 +1,10 @@
 @extends('admin')
 
 @section('title', 'Tambah File')
+@section('parent-bread')
+    <a href="{{route('file.index')}}">File</a>
+@endsection
+@section('breadcrumb','Tambah File')
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-xlg-9 col-md-7">
@@ -16,6 +20,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 text-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
                                 <button class="btn btn-success" type="submit">Tambahkan</button>
                             </div>
                         </div>

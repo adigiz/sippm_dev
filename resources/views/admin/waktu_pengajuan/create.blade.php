@@ -1,6 +1,10 @@
 @extends('admin')
 
 @section('title', 'Tambah Waktu Pengajuan')
+@section('breadcrumb','Tambah Waktu Pengajuan')
+@section('parent-bread')
+    <a href="{{route('waktu_pengajuan.index')}}">Waktu Pengajuan</a>
+@endsection
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-xlg-9 col-md-7">
@@ -46,6 +50,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 text-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
                                 <button class="btn btn-success" type="submit">Tambahkan</button>
                             </div>
                         </div>

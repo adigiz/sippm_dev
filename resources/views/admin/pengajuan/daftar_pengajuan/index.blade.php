@@ -1,6 +1,7 @@
 @extends('admin')
 
 @section('title', 'Semua Pengajuan')
+@section('breadcrumb','Semua Pengajuan')
 @section('styles')
     <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}">
 @endsection
@@ -25,7 +26,7 @@
     @endif
 
     <div class="row">
-        <div class="col-12 m-t-30">
+        <div class="col-12">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Daftar Pengajuan</h4>
@@ -40,6 +41,7 @@
                                 <th>Total Dana</th>
                                 <th>Nama Ketua</th>
                                 <th>Status</th>
+                                <th>Anggota</th>
                                 <th>Tanggal Diajukan</th>
                                 <th>Aksi</th>
                             </tr>
@@ -74,6 +76,13 @@
                                             <span class="label label-primary">Belum diperiksa</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if(\App\Anggota::where('pengajuan_id',$pengajuan->id)->exists())
+                                            Lengkap
+                                        @else
+                                            Belum Lengkap
+                                        @endif
+                                    </td>
                                     <td>{{date('d-m-Y',strtotime($pengajuan->created_at))}}</td>
                                     <td>
                                         <form class="form-horizontal form-material" method='post' action="{{route('persetujuan.update', $pengajuan->id)}}">
@@ -81,9 +90,11 @@
                                             {{ method_field('PUT') }}
                                             <input name="_method" type="hidden" value="PUT">
                                             <div class="col-sm-12">
-                                                <button class="btn btn-sm btn-danger" value="3" name="persetujuan_id" type="submit">Tolak</button>
+                                                <button class="btn btn-sm btn-danger" value="3" name="persetujuan_id"  type="submit">Tolak</button>
                                                 <button class="btn btn-sm btn-warning" value="2" name="persetujuan_id" type="submit">Revisi</button>
-                                                <button class="btn btn-sm btn-success" value="1" name="persetujuan_id" type="submit">Setujui</button>
+                                                @if(\App\Anggota::where('pengajuan_id',$pengajuan->id)->exists())
+                                                    <button class="btn btn-sm btn-success" value="1" name="persetujuan_id" type="submit">Setujui</button>
+                                                @endif
                                                 <a href="{{asset("uploads/file/$pengajuan->proposal")}}" class="btn btn-sm btn-info" >Download</a>
                                             </div>
                                         </form>

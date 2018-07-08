@@ -16,7 +16,7 @@
                     <a href="#" class="has-arrow waves-effect"><i class="fa fa-paste m-r-10" aria-hidden="true"></i>Pengajuan</a>
                     <ul class="collapse">
                         <li><a href="{{url('admin/persetujuan/')}}">Semua Pengajuan</a></li>
-                        <li><a href="{{route('publikasi')}}">Penelitian</a></li>
+                        <li><a href="{{route('admin.index.penelitian')}}">Penelitian</a></li>
                         <li><a href="{{route('admin.index.pengabdian')}}">Pengabdian</a></li>
                     </ul>
                 </li>
@@ -24,10 +24,10 @@
                     <a href="{{route('admin.sedang_berjalan')}}" class="waves-effect"><i class="fa fa-paper-plane m-r-10" aria-hidden="true"></i>Sedang Berjalan</a>
                 </li>
                 <li>
-                    <a href="#" class="has-arrow waves-effect"><i class="fa fa-book m-r-10" aria-hidden="true"></i>Berita </a>
+                    <a href="#" class="has-arrow waves-effect"><i class="fa fa-bullhorn m-r-10" aria-hidden="true"></i>Pengumuman </a>
                     <ul class="collapse">
-                        <li><a href="{{ url('admin/post/') }}">Lihat Berita</a></li>
-                        <li><a href="{{ url('admin/post/create') }}">Tambah berita</a></li>
+                        <li><a href="{{ url('admin/post/') }}">Daftar Pengumuman</a></li>
+                        <li><a href="{{ url('admin/post/create') }}">Tambah Pengumuman</a></li>
                     </ul>
                 </li>
                 <li>
@@ -38,7 +38,12 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('admin.riwayat') }}" class="waves-effect"><i class="fa fa-history m-r-10" aria-hidden="true"></i>Riwayat</a>
+                    <a href="#" class="has-arrow waves-effect"><i class="fa fa-history m-r-10" aria-hidden="true"></i>Daftar Riwayat</a>
+                    <ul class="collapse">
+                        <a href="{{ route('admin.riwayat') }}" class="waves-effect">Seluruh Riwayat</a>
+                        <a href="{{ route('admin.riwayat.pertemuan') }}" class="waves-effect">Riwayat Pertemuan</a>
+                        <a href="{{ route('admin.riwayat.publikasi') }}" class="waves-effect">Riwayat Publikasi</a>
+                    </ul>
                 </li>
 
 

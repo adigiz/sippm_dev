@@ -17,29 +17,32 @@
                         </div>
                         <div class="form-group row">
                             <label class="custom-control custom-checkbox">
-                                <input class="styled-checkbox" type="checkbox" id="jurnal" name="jurnal" value="1">
-                                <label>Publikasi Ilmiah</label>
+                                <input class="styled-checkbox" type="checkbox" id="read" name="jurnal" value="1">
+                                <label for="read">Publikasi Ilmiah</label>
                             </label>
                         </div>
                         <div class="form-group row">
                             <label class="custom-control custom-checkbox">
-                                <input class="styled-checkbox" type="checkbox" name="pertemuan_ilmiah" value="1">
-                                <label>Pertemuan Ilmiah</label>
+                                <input class="styled-checkbox" type="checkbox" id="read1" name="pertemuan_ilmiah" value="1">
+                                <label for="read1">Pertemuan Ilmiah</label>
                             </label>
                         </div>
                         <div class="form-group row">
                             <label class="custom-control custom-checkbox">
-                                <input class="styled-checkbox" type="checkbox" name="haki" value="1">
-                                <label>Haki</label>
+                                <input class="styled-checkbox" type="checkbox" id="read2" name="haki" value="1">
+                                <label for="read2">Haki</label>
                             </label>
                         </div>
                         <div class="form-group row">
                             <label class="custom-control custom-checkbox">
-                                <input class="styled-checkbox" type="checkbox" name="prototype" value="1">
-                                <label>Prototype</label>
+                                <input class="styled-checkbox" type="checkbox" id="read3" name="prototype" value="1">
+                                <label for="read3">Prototype</label>
                             </label>
                         </div>
                         <div class="form-group">
+                            <div class="col-sm-12 text-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-default">Back</a>
+                            </div>
                             <div class="col-sm-12 text-right">
                                 <button class="btn btn-success" type="submit">Tambahkan</button>
                             </div>

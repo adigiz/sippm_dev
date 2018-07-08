@@ -1,5 +1,6 @@
 @extends('users.home')
 @section('title', 'Ganti Password')
+@section('breadcrumb','Ganti Password')
 @section('content')
     <div class="container">
         <div class="row">
@@ -47,8 +48,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
+                                <div class="col-12 text-right">
+                                    <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-success">
                                         Ganti Password
                                     </button>
                                 </div>

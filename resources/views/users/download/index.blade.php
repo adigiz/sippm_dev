@@ -1,7 +1,7 @@
 @extends('users.home')
 
 @section('title', 'Download')
-@section('content')
+@section('breadcrumb','Download')
 
 @section('title', 'Daftar File')
 @section('content')

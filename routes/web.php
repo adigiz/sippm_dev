@@ -18,19 +18,20 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::get('/home', 'PostController@index',['middleware' => 'auth']);
-Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::prefix('admin')->group(function (){
     Route::middleware(['admin'])->group(function (){
         Route::get('/', 'AdminController@index')->name('admin.dashboard');
+        Route::get('/logout', '\App\Http\Controllers\Auth\AdminLoginController@logout')->name('admin.logout');
         Route::resource('/post','PostAdminController');
         Route::resource('/persetujuan','PersetujuanController');
-        Route::get('/daftar-publikasi','PersetujuanController@indexPenelitian')->name('admin.index.publikasi');
+        Route::get('/daftar-penelitian','PersetujuanController@indexPenelitian')->name('admin.index.penelitian');
         Route::get('/daftar-pengabdian', 'PersetujuanController@indexPengabdian')->name('admin.index.pengabdian');
         Route::get('/revisi','PersetujuanController@revisi');
         Route::get('/sedang_berjalan', 'PPMSedangBerjalan@indexAdmin')->name('admin.sedang_berjalan');
         Route::get('/daftar_riwayat','RiwayatPenelitianController@indexAdmin')->name('admin.riwayat');
+        Route::get('/daftar_riwayat/pertemuan','RiwayatPenelitianController@indexAdminPertemuan')->name('admin.riwayat.pertemuan');
+        Route::get('/daftar_riwayat/publikasi','RiwayatPenelitianController@indexAdminPublikasi')->name('admin.riwayat.publikasi');
         Route::resource('/waktu_pengajuan','WaktuPengajuanController');
         Route::resource('/file','FileAdminController');
     });
@@ -42,6 +43,8 @@ Route::prefix('admin')->group(function (){
 
 Route::prefix('users')->group(function(){
     Route::middleware(['auth'])->group(function () {
+        Route::get('/', 'PostController@index')->name('home');
+        Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout')->name('users.logout');
         Route::resource('/profil','ProfileController');
         Route::resource('/pengajuan_penelitian','PengajuanPenelitianController');
         Route::resource('/pengajuan_pengabdian','PengajuanPengabdianController');

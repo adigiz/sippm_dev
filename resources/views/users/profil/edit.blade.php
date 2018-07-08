@@ -1,6 +1,10 @@
 @extends('users.home')
 
 @section('title', 'Edit Profil')
+@section('parent-bread')
+    <a href="{{route('profil.index')}}">Profil</a>
+@endsection
+@section('breadcrumb','Edit Profil')
 @section('content')
 
     <div class="row">
@@ -36,18 +40,29 @@
                             <label for="niph" class="col-2 col-form-label">Nama</label>
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="name" value="{{$profile['name']}}">
+
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="avatar" class="col-2 col-form-label">Foto Profil</label>
                             <div class="col-10">
-                                <input class="form-control-file" type="file"  name="avatar" value="{{$profile['avatar']}}">
+                                <input class="form-control" type="file"  name="avatar" value="{{$profile['avatar']}}">
+                                @if ($errors->has('avatar'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('avatar') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">NIPH</label>
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="niph" value="{{$profile['niph']}}">
+                                @if ($errors->has('niph'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('niph') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
@@ -100,13 +115,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="example-month-input" class="col-2 col-form-label">No Telfon</label>
+                            <label for="no_telp" class="col-2 col-form-label">No Telfon</label>
                             <div class="col-10">
                                 <input class="form-control" type="text" value="{{$profile['no_telp']}}" id="no_telp" name="no_telp">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12 text-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
                                 <button class="btn btn-success" type="submit">Simpan</button>
                             </div>
                         </div>

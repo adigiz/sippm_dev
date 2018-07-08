@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/ui/assets/images/favicon.png') }}">
-    <title>Sistem Informasi Penelitian dan Pengabdian Masyarakat</title>
+    <title>@yield('title') - SIPPM</title>
     <link href="{{ asset('/ui/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/colors/blue.css') }}" id="theme" rel="stylesheet">
@@ -21,7 +21,7 @@
 
 <div class="preloader">
     <svg class="circular" viewBox="25 25 50 50">
-        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/> </svg>
 </div>
 
 <div id="main-wrapper">
@@ -35,6 +35,18 @@
             <div class="row page-titles">
                 <div class="col-md-6 col-8 align-self-center">
                     <h3 class="text-themecolor m-b-0 m-t-0">@yield('title')</h3>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)">Home</a>
+                        </li>
+                        @if(\Illuminate\Support\Facades\View::hasSection('parent-bread'))
+                            <li class="breadcrumb-item">
+                                @yield('parent-bread')
+                            </li>
+                        @endif
+
+                        <li class="breadcrumb-item active">@yield('breadcrumb')</li>
+                    </ol>
                 </div>
             </div>
 

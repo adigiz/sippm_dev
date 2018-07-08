@@ -1,8 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 use Akaunting\Money\Money;
+use App\Charts\DashboardChart;
 use App\Pengajuan;
 use App\Profile;
+use ConsoleTVs\Charts;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -22,17 +25,17 @@ class AdminController extends Controller
      */
     public function index()
     {
-//        $users = User::where(DB::raw("(DATE_FORMAT(created_at,'%Y'))"),date('Y'))
+//        $users = Pengajuan::where(DB::raw("(DATE_FORMAT(created_at,'%Y'))"),date('Y'))
 //            ->get();
 //
-//        $chart = Charts::database($users, 'bar', 'highcharts')
+//        $data['chart'] = Charts::database($users, 'bar', 'highcharts')
 //            ->title("Monthly new Register Users")
 //            ->elementLabel("Total Users")
 //            ->dimensions(1000, 500)
 //            ->responsive(true)
 //            ->groupByMonth(date('Y'), true);
-//        $chart = new DashboardChart();
-//        $chart->dataset('Sample', 'bar', [100, 65, 84, 45, 90]);
+//        $data['chart'] = new DashboardChart();
+//        $data['chart']->dataset('Sample', 'bar', [100, 65, 84, 45, 90]);
         $data['jumlah_dosen'] = Profile::count();
         $data['jumlah_pengajuan'] = Pengajuan::count();
         $data['didanai'] = Pengajuan::where('persetujuan_id',1)->count();

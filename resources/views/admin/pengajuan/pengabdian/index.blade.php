@@ -1,6 +1,7 @@
 @extends('admin')
 
 @section('title', 'Daftar Pengajuan Pengabdian Masyarakat')
+@section('breadcrumb','Daftar Pengajuan Pengabdian Masyarakat')
 @section('styles')
     <link rel="stylesheet" type="text/css" href="{{asset('css/datatables.min.css')}}">
 @endsection
@@ -25,7 +26,7 @@
     @endif
 
     <div class="row">
-        <div class="col-12 m-t-30">
+        <div class="col-12">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Daftar Pengajuan Pengabdian</h4>
@@ -81,7 +82,9 @@
                                             <div class="col-sm-12">
                                                 <button class="btn btn-sm btn-danger" value="3" name="persetujuan_id" type="submit">Tolak</button>
                                                 <button class="btn btn-sm btn-warning" value="2" name="persetujuan_id" type="submit">Revisi</button>
-                                                <button class="btn btn-sm btn-success" value="1" name="persetujuan_id" type="submit">Setujui</button>
+                                                @if(\App\Anggota::where('pengajuan_id',$pengajuan->id)->exists())
+                                                    <button class="btn btn-sm btn-success" value="1" name="persetujuan_id" type="submit">Setujui</button>
+                                                @endif
                                                 <a href="{{asset("uploads/file/$pengajuan->proposal")}}" class="btn btn-sm btn-info" >Download</a>
                                             </div>
                                         </form>

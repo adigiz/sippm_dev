@@ -31,12 +31,15 @@
                             <strong>Jumlah Mahasiswa</strong>
                             <br>
                             <p class="text-muted">{{$pengajuan->jumlah_mhs}}</p>
-                            <strong>Jumlah Lab</strong>
-                            <br>
-                            <p class="text-muted">{{$mitra->nama_mitra}}</p>
-                            <strong>No Telp</strong>
-                            <br>
-                            <p class="text-muted">{{$mitra->telp_mitra}}</p>
+                            @if($mitra != NULL)
+                                <strong>Nama Mitra</strong>
+                                <br>
+                                <p class="text-muted">{{$mitra->nama_mitra}}</p>
+                                <strong>No Telp Mitra</strong>
+                                <br>
+                                <p class="text-muted">{{$mitra->telp_mitra}}</p>
+                            @endif
+
                         </div>
                         <div class="col-md-6">
                             <h4 class="card-title">Data Anggota</h4>

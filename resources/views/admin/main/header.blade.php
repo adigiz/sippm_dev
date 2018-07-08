@@ -20,9 +20,9 @@
             </ul>
             <ul class="navbar-nav my-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">Welcome {{ __('Admin') }} <span class="caret"></span></a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown">Welcome {{ __('Admin') }} <span></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <a class="nav-link waves-effect waves-dark" href="{{ url('logout') }}" aria-haspopup="true" aria-expanded="false">Logout</a>
+                        <a class="nav-link waves-effect waves-dark" href="{{ route('admin.logout') }}" aria-haspopup="true" aria-expanded="false">Logout</a>
                     </ul>
                 </li>
             </ul>

@@ -25,10 +25,10 @@
                     <strong>Jumlah Mahasiswa</strong>
                     <br>
                     <p class="text-muted">{{$pengajuan->jumlah_mhs}}</p>
-                    <strong>Jumlah Lab</strong>
+                    <strong>Nama Mitra</strong>
                     <br>
                     <p class="text-muted">{{$mitra->nama_mitra}}</p>
-                    <strong>No Telp</strong>
+                    <strong>No Telp Mitra</strong>
                     <br>
                     <p class="text-muted">{{$mitra->telp_mitra}}</p>
                 </div>

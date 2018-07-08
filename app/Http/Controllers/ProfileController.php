@@ -11,6 +11,7 @@ use App\Prodi;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use JavaScript;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -25,7 +26,8 @@ class ProfileController extends Controller
             $data['users'] = User::find(Auth::id());
             $data['jurusan'] = Jurusan::all();
             $data['prodi'] = Prodi::all();
-            $data['profile'] = Profile::find(Auth::id());
+            $data['profile'] = Profile::where('user_id',Auth::id())->first();
+
             return view('users/profil.index', $data);
         } else {
             $data['jurusan'] = Jurusan::all();
@@ -55,17 +57,31 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         $data = new Profile();
-        $data->user_id = Auth::id();
-        $data->niph = $request->get('niph');
-        $data->name = $request->get('name');
+        $input = $request->all();
+        $validator = Validator::make($input,
+            [
+                'niph' => 'required|digits:10|unique:profils,niph',
+                'avatar' => 'mimes:jpeg,jpg,png,bmp|max:1024'
+            ]
+        );
         $nm = $request->get('niph');
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
         if($request->hasFile('avatar')){
             $avatar = $request->file('avatar');
             $ext = $avatar->getClientOriginalExtension();
             $newName = Time().'.'.$nm.'.'.$ext;
             Image::make($avatar)->resize(150,150)->save(public_path('uploads/avatar/'.$newName));
             $data->avatar = $newName;
+        } else {
+            $data->avatar = "default.jpg";
         }
+        $data->user_id = Auth::id();
+        $data->niph = $request->get('niph');
+        $data->name = $request->get('name');
+
+
         $data->pangkat = $request->get('pangkat');
         $data->jabatan = $request->get('jabatan');
         $data->jurusan_id = $request->get('jurusan');
@@ -94,14 +110,20 @@ class ProfileController extends Controller
      * @param  \App\Profile  $profile
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
+        $current_user = Profile::where('user_id',Auth::id())->first()->id;
+        if($current_user != $id){
+            return redirect()->to('users/profil');
+        } else {
+            $data['users'] = User::find($id);
+            $data['jurusan'] = Jurusan::all();
+            $data['prodi'] = Prodi::all();
+            $data['profile'] = Profile::find($id);
+            return view('users/profil.edit', $data);
+        }
 
-        $data['users'] = User::find($id);
-        $data['jurusan'] = Jurusan::all();
-        $data['prodi'] = Prodi::all();
-        $data['profile'] = Profile::find($id);
-        return view('users/profil.edit', $data);
 
     }
 
@@ -114,6 +136,16 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $input = $request->all();
+        $validator = Validator::make($input,
+            [
+                'niph' => 'required|digits:9',
+                'avatar' => 'mimes:jpeg,jpg,png,bmp|max:1024'
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
         $data = Profile::where('id',$id)->first();
         $data->niph = $request->get('niph');
         $data->pangkat = $request->get('pangkat');

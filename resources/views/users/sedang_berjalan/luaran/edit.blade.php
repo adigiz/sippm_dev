@@ -20,12 +20,12 @@
                             </div>
                             <div class="form-group row">
                                 <label class="custom-control custom-checkbox">
-                                    <input class="styled-checkbox" id="read" type="checkbox" id="jurnal" name="jurnal" value="@if($luaran->jurnal == NULL) 0 @else {{$luaran->jurnal}} @endif"
+                                    <input class="styled-checkbox" id="read" type="checkbox" name="jurnal" value="@if($luaran->jurnal == NULL) 0 @else {{$luaran->jurnal}} @endif"
                                            @if( $luaran->jurnal == 1 )
                                                 checked="1"
                                            @endif
                                     >
-                                    <label>Publikasi Ilmiah</label>
+                                    <label for="read">Publikasi Ilmiah</label>
                                 </label>
                             </div>
                             <div class="form-group row">
@@ -35,7 +35,7 @@
                                            checked="1"
                                             @endif
                                     >
-                                    <label>Pertemuan Ilmiah</label>
+                                    <label for="read1">Pertemuan Ilmiah</label>
                                 </label>
                             </div>
                             <div class="form-group row">
@@ -45,7 +45,7 @@
                                            checked="1"
                                             @endif
                                     >
-                                    <label>Haki</label>
+                                    <label for="read2">Haki</label>
                                 </label>
                             </div>
                             <div class="form-group row">
@@ -55,7 +55,7 @@
                                            checked="1"
                                             @endif
                                     >
-                                    <label>Prototype</label>
+                                    <label for="read3">Prototype</label>
                                 </label>
                             </div>
                             <div class="form-group">

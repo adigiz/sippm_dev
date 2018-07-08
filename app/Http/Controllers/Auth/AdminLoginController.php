@@ -28,9 +28,10 @@ class AdminLoginController extends Controller
         // if unsuccessful, then redirect back to the login with the form data
         return redirect()->back()->withInput($request->only('email', 'remember'));
     }
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::guard('admin')->logout();
+        $request->session()->flush();
         return redirect('/');
     }
 }

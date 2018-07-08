@@ -17,15 +17,21 @@ class AnggotaPengabdianController extends Controller
 {
     public function create()
     {
-        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->exists();
+        $id_profil = Profile::where('user_id',Auth::id())->first()->id;
+        $var = Pengajuan::where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->exists();
+        $id_pengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
         if($var) {
-            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
-            $data['ketua'] = Profile::where('user_id',Auth::id())->first();
-            $data['profile'] =  Profile::where('user_id','!=',Auth::id())->get();
-            $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
-            $data['mitra'] = Mitra::where('pengajuan_id',$id_pengajuan)->first();
-            $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->orderBy('created_at', 'desc')->first();
-            return view('users/pengajuan_pengabdian/anggota_pengabdian.create', $data);
+            if(Anggota::where('pengajuan_id',$id_pengajuan)->exists()){
+                return redirect()->route('daftar_pengajuan.index');
+            } else {
+                $data['ketua'] = Profile::where('user_id',Auth::id())->first();
+                $data['profile'] =  Profile::where('id','!=',$id_profil)->get();
+                $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+                $data['mitra'] = Mitra::where('pengajuan_id',$id_pengajuan)->first();
+                $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->orderBy('created_at', 'desc')->first();
+                return view('users/pengajuan_pengabdian/anggota_pengabdian.create', $data);
+            }
+
         } else {
             return redirect()->route('pengajuan_pengabdian.create')->with('alert-warning','Anda belum mengajukan Pengabdian Masyarakat');
         }

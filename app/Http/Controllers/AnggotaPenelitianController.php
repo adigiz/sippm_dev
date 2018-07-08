@@ -16,14 +16,21 @@ class AnggotaPenelitianController extends Controller
     //
     public function create()
     {
-        $var = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->exists();
+        $id_profil = Profile::where('user_id',Auth::id())->first()->id;
+        $var = Pengajuan::where('profil_id', $id_profil)->where('jenis_pengajuan_id', 1)->exists();
+        $id_pengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
+
         if($var) {
-            $id_pengajuan = DB::table('pengajuans')->where('profil_id', Auth::id())->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
-            $data['ketua'] = Profile::where('user_id',Auth::id())->first();
-            $data['profile'] =  Profile::where('user_id','!=',Auth::id())->get();
-            $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
-            $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->first();
-            return view('users/pengajuan_penelitian/anggota_penelitian.create', $data);
+            if(Anggota::where('pengajuan_id',$id_pengajuan)->exists()){
+                return redirect()->route('daftar_pengajuan.index');
+            } else {
+                $data['ketua'] = Profile::where('user_id',Auth::id())->first();
+                $data['profile'] =  Profile::where('id','!=',$id_profil)->get();
+                $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+                $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->first();
+                return view('users/pengajuan_penelitian/anggota_penelitian.create', $data);
+            }
+
         } else {
             return redirect()->route('pengajuan_penelitian.create')->with('alert-warning','Anda belum mengajukan Penelitian');
         }

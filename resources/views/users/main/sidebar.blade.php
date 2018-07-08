@@ -3,7 +3,7 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li>
-                    <a href="{{ url('home') }}" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>Home</a>
+                    <a href="{{ route('home') }}" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>Home</a>
                 </li>
 
                 <li>

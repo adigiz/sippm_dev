@@ -26,5 +26,10 @@ class Profile extends Model
     public function anggotas(){
         return $this->hasMany('App\Anggota');
     }
+    public function pertemuanIlmiah(){
+        return $this->hasMany('App\PertemuanIlmiah');
+    }
+
+
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Kelengkapan;
+use App\Luaran;
 use App\Pengajuan;
 use App\PertemuanIlmiah;
 use App\Prototype;
@@ -36,30 +37,72 @@ class PPMSedangBerjalan extends Controller
                 $tutup_carbon = Carbon::parse($tutup);
                 $sekarang = Carbon::now();
                 if($sekarang->gt($tutup_carbon)){
-                    $tahun_ini = $sekarang->year;
-//                $data['pengajuans'] = Pengajuan::where('profil_id', Auth::id())->where('persetujuan_id',1)->whereYear('created_at',$tahun_ini)->orderBy('updated_at','desc')->get();
-                    $id_pengajuan = Pengajuan::where('profil_id', Auth::id())->where('persetujuan_id',1)->whereYear('created_at',$tahun_ini)->orderBy('updated_at','desc')->first()->id;
-//                $data['luarans'] = Luaran::whereIn('pengajuan_id', $id_pengajuan)->orderBy('updated_at','desc')->get();
-                    $data['pengajuans'] = DB::table('jenis_luarans')
-                        ->where('profil_id', Auth::id())->where('persetujuan_id',1)->whereYear('pengajuans.created_at',$tahun_ini)->orderBy('pengajuans.updated_at','desc')
-                        ->join('pengajuans', 'pengajuans.id', '=', 'jenis_luarans.pengajuan_id')
-                        ->select('pengajuans.id',
-                            'pengajuans.jenis_pengajuan_id',
-                            'pengajuans.judul_penelitian',
-                            'pengajuans.persetujuan_id',
-                            'pengajuans.abstrak',
-                            'jenis_luarans.jurnal',
-                            'jenis_luarans.pertemuan_ilmiah',
-                            'jenis_luarans.prototype',
-                            'jenis_luarans.haki',
-                            'pengajuans.proposal')
-                        ->get();
-                    $data['publikasis'] = Publikasi::where('pengajuan_id', $id_pengajuan)->get();
-                    $data['pertemuans'] = PertemuanIlmiah::where('pengajuan_id', $id_pengajuan)->get();
-                    $data['hakis'] = Haki::where('pengajuan_id',$id_pengajuan)->get();
-                    $data['prototypes'] = Prototype::where('pengajuan_id',$id_pengajuan)->get();
-                    $data['kelengkapan'] = Kelengkapan::where('pengajuan_id', $id_pengajuan)->first();
-                    return view('users.sedang_berjalan.index',$data);
+                    $id_profil = Profile::where('user_id', Auth::id())->first()->id;
+                    if(Pengajuan::where('profil_id', $id_profil)->exists()){
+                        $tahun_ini = $sekarang->year;
+                        if(Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',1)->exists()){
+                            $id_p = Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',1)->first()->id;
+                            if(Luaran::where('pengajuan_id',$id_p)->exists()){
+                                $data['penelitians'] = DB::table('jenis_luarans')
+                                    ->where('profil_id', $id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',1)->whereYear('pengajuans.created_at',$tahun_ini)->orderBy('pengajuans.updated_at','desc')
+                                    ->join('pengajuans', 'pengajuans.id', '=', 'jenis_luarans.pengajuan_id')
+                                    ->select('pengajuans.id',
+                                        'pengajuans.jenis_pengajuan_id',
+                                        'pengajuans.judul_penelitian',
+                                        'pengajuans.persetujuan_id',
+                                        'pengajuans.abstrak',
+                                        'jenis_luarans.jurnal',
+                                        'jenis_luarans.pertemuan_ilmiah',
+                                        'jenis_luarans.prototype',
+                                        'jenis_luarans.haki',
+                                        'pengajuans.proposal')
+                                    ->get();
+                            } else {
+                                $data['penelitians'] = Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',1)->get();
+                            }
+                        } else {
+                            $data['penelitians'] = NULL;
+                        }
+                        if(Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',2)->exists()){
+                            $id_p = Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',2)->first()->id;
+                            if(Luaran::where('pengajuan_id',$id_p)->exists()){
+                                $data['pengabdians'] = DB::table('jenis_luarans')
+                                    ->where('profil_id', $id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',2)->whereYear('pengajuans.created_at',$tahun_ini)->orderBy('pengajuans.updated_at','desc')
+                                    ->join('pengajuans', 'pengajuans.id', '=', 'jenis_luarans.pengajuan_id')
+                                    ->select('pengajuans.id',
+                                        'pengajuans.jenis_pengajuan_id',
+                                        'pengajuans.judul_penelitian',
+                                        'pengajuans.persetujuan_id',
+                                        'pengajuans.abstrak',
+                                        'jenis_luarans.jurnal',
+                                        'jenis_luarans.pertemuan_ilmiah',
+                                        'jenis_luarans.prototype',
+                                        'jenis_luarans.haki',
+                                        'pengajuans.proposal')
+                                    ->get();
+                            } else {
+                                $data['pengabdians'] = Pengajuan::where('profil_id',$id_profil)->where('persetujuan_id',1)->where('jenis_pengajuan_id',2)->get();
+
+                            }
+                        } else {
+                            $data['pengabdians'] = NULL;
+                        }
+
+                        $id_pengajuan = Pengajuan::where('profil_id', $id_profil)->where('persetujuan_id',1)->whereYear('created_at',$tahun_ini)->orderBy('updated_at','desc')->get()->pluck('id');
+                        $data['publikasis'] = Publikasi::whereIn('pengajuan_id', $id_pengajuan)->get();
+                        $data['pertemuans'] = PertemuanIlmiah::whereIn('pengajuan_id', $id_pengajuan)->get();
+                        $data['hakis'] = Haki::whereIn('pengajuan_id',$id_pengajuan)->get();
+                        $data['prototypes'] = Prototype::whereIn('pengajuan_id',$id_pengajuan)->get();
+                        $data['kelengkapan'] = Kelengkapan::whereIn('pengajuan_id', $id_pengajuan)->first();
+                        return view('users.sedang_berjalan.index',$data);
+
+
+                    } else {
+                        $data['penelitians'] = NULL;
+                        $data['pengabdians'] = NULL;
+                        return view('users.sedang_berjalan.index',$data)->with('alert-warning','Tidak ada Penlitian yang sedang Berjalan');
+                    }
+
                 } else {
                     $data['pengajuans'] = NULL;
                     return view('users.sedang_berjalan.index',$data)->with('alert-warning','Tidak ada Penlitian yang sedang Berjalan');
@@ -87,28 +130,28 @@ class PPMSedangBerjalan extends Controller
             $id_pengajuan = Pengajuan::whereIn('profil_id', $id_profil)->where('persetujuan_id',1)->whereYear('created_at',$tahun_ini)->orderBy('updated_at','desc')->pluck('id');
 
 //                $data['luarans'] = Luaran::whereIn('pengajuan_id', $id_pengajuan)->orderBy('updated_at','desc')->get();
-            $data['pengajuans'] = DB::table('pengajuans')
-                ->whereIn('pengajuans.id', $id_pengajuan)
-                ->join('jenis_luarans', 'pengajuans.id', '=', 'jenis_luarans.pengajuan_id')
-                ->join('profils', 'profils.id', '=', 'pengajuans.profil_id')
-                ->select('pengajuans.id',
-                    'pengajuans.jenis_pengajuan_id',
-                    'pengajuans.judul_penelitian',
-                    'pengajuans.persetujuan_id',
-                    'jenis_luarans.jurnal',
-                    'jenis_luarans.pertemuan_ilmiah',
-                    'jenis_luarans.haki',
-                    'jenis_luarans.prototype',
-                    'pengajuans.proposal',
-                    'pengajuans.total_dana',
-                    'profils.name')
-                ->get();
-            dd($data['pengajuans']);
+//            $data['pengajuans'] = DB::table('pengajuans')
+//                ->whereIn('pengajuans.id', $id_pengajuan)
+//                ->leftJoin('jenis_luarans', 'pengajuans.id', '=', 'jenis_luarans.pengajuan_id')
+//                ->leftJoin('profils', 'profils.id', '=', 'pengajuans.profil_id')
+//                ->select('pengajuans.id',
+//                    'pengajuans.jenis_pengajuan_id',
+//                    'pengajuans.judul_penelitian',
+//                    'pengajuans.persetujuan_id',
+//                    'jenis_luarans.jurnal',
+//                    'jenis_luarans.pertemuan_ilmiah',
+//                    'jenis_luarans.haki',
+//                    'jenis_luarans.prototype',
+//                    'pengajuans.proposal',
+//                    'pengajuans.total_dana',
+//                    'profils.name')
+//                ->get();
+            $data['pengajuans'] = Pengajuan::whereIn('id',$id_pengajuan)->get();
             $data['publikasis'] = Publikasi::whereIn('pengajuan_id', $id_pengajuan)->get();
             $data['pertemuans'] = PertemuanIlmiah::whereIn('pengajuan_id', $id_pengajuan)->get();
             $data['hakis'] = Haki::whereIn('pengajuan_id',$id_pengajuan)->get();
             $data['prototypes'] = Prototype::whereIn('pengajuan_id',$id_pengajuan)->get();
-            $data['kelengkapan'] = Kelengkapan::whereIn('pengajuan_id', $id_pengajuan)->first();
+            $data['kelengkapan'] = Kelengkapan::whereIn('pengajuan_id', $id_pengajuan)->get();
             return view('admin.sedang_berjalan.index',$data);
         } else {
             $data['pengajuans'] = NULL;

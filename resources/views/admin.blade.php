@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/ui/assets/images/favicon.png') }}">
-    <title>Sistem Informasi Penelitian dan Pengabdian Masyarakat</title>
+    <title>@yield('title') - SIPPM</title>
     @yield('styles')
     <link href="{{ asset('/ui/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/ui/lite version/css/style.css') }}" rel="stylesheet">
@@ -34,6 +34,18 @@
                     <div class="row page-titles">
                         <div class="col-md-6 col-8 align-self-center">
                             <h3 class="text-themecolor m-b-0 m-t-0">@yield('title')</h3>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0)">Home</a>
+                                </li>
+                                @if(\Illuminate\Support\Facades\View::hasSection('parent-bread'))
+                                    <li class="breadcrumb-item">
+                                        @yield('parent-bread')
+                                    </li>
+                                @endif
+
+                                <li class="breadcrumb-item active">@yield('breadcrumb')</li>
+                            </ol>
                         </div>
                     </div>
 

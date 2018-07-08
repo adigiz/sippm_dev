@@ -12,7 +12,7 @@
                         <div class="form-group m-t-40 row">
                             <label for="judul-penelitian" class="col-2 col-form-label">Judul Penelitian</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text" name="judul_penelitian">
+                                <input required class="form-control" type="text" name="judul_penelitian" placeholder="e.g. Prototype Robot Pemadam Api Berbasis Mikrokontroller Arduino UNO">
                             </div>
                         </div>
                         <div class="form-group m-t-40 row">
@@ -39,25 +39,25 @@
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">Jumlah Anggota</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="1" name="jumlah_anggota">
+                                <input required class="form-control" type="number" min="1" max="5" name="jumlah_anggota" placeholder="e.g. 1,2,..5">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml lab" class="col-2 col-form-label">Jumlah Lab</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="0" name="jumlah_lab">
+                                <input required class="form-control" type="number" min="0" max="3" name="jumlah_lab" placeholder="e.g. 1,2,..5">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml-mhs" class="col-2 col-form-label">Jumlah Mahasiswa</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="0" name="jumlah_mhs">
+                                <input required class="form-control" type="number" min="0" max="5" name="jumlah_mhs" placeholder="e.g. 1,2,..5">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="no-telp" class="col-2 col-form-label">No Telpon</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="no_telp">
+                                <input required class="form-control" type="text"  name="no_telp" placeholder="e.g. 085287915246">
                             </div>
                         </div> <h4 class="card-title"> Form Mitra</h4>
                         <div class="form-group row">
@@ -101,25 +101,30 @@
                         <div class="form-group row">
                             <label for="total_dana" class="col-2 col-form-label">Total Dana yang Dibutuhkan</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="total_dana">
+                                <input required class="form-control" type="text"  name="total_dana" placeholder="e.g. 5000000">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-pribadi" class="col-2 col-form-label">Dana Pribadi</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="dana_pribadi">
+                                <input required class="form-control" type="text"  name="dana_pribadi" placeholder="e.g. 5000000 / Tidak Ada">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-lain" class="col-2 col-form-label">Dana Lain</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="dana_lain">
+                                <input required class="form-control" type="text"  name="dana_lain" placeholder="e.g. 5000000 / Tidak Ada">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="upload" class="col-2 col-form-label">Upload Proposal</label>
                             <div class="col-10">
                                 <input required class="form-control" type="file"  name="proposal">
+                                @if ($errors->has('proposal'))
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $errors->first('proposal') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">

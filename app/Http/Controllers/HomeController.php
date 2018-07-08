@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
         if(Profile::where('user_id',Auth::id())->exists()) {
-            return view('home');
+            return view('users.home');
         } else {
             return redirect()->route('profil.create')->with('alert-warning','Anda belum mengisi profil');
         }

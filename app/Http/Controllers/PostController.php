@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -15,7 +16,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::orderBy('created_at','desc')->get();
+        $data = DB::table('posts')
+            ->leftJoin('files', 'posts.file_id', '=', 'files.id')
+            ->select('posts.id','posts.judul', 'posts.isi', 'posts.created_at','nama_file')
+            ->orderBy('posts.created_at','desc')
+            ->paginate(2);
 
         return view('users/post.index',compact('data'));
     }

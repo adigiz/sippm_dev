@@ -51,7 +51,7 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-    
+
     /*==================================================================
     [ Show pass ]*/
     var showPass = 0;

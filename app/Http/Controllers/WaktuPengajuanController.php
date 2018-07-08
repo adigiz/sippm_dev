@@ -13,7 +13,7 @@ class WaktuPengajuanController extends Controller
     }
     public function index()
     {
-        $data = WaktuPengajuan::orderBy('created_at', 'desc')->get();
+        $data = WaktuPengajuan::orderBy('created_at', 'desc')->paginate(2);
         return view('admin.waktu_pengajuan.index',compact('data'));
     }
 
@@ -33,6 +33,10 @@ class WaktuPengajuanController extends Controller
         return redirect()->route('waktu_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
     }
 
+    public  function edit($id){
+        $data['waktu'] = WaktuPengajuan::where('id',$id)->first();
+        return view('admin.waktu_pengajuan.edit',$data);
+    }
     public function update(Request $request, $id)
     {
         $data = WaktuPengajuan::where('id',$id)->first();

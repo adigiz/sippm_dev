@@ -14,7 +14,7 @@
                         {{csrf_field()}}
                         <div class="form-group m-t-40 row">
                             <input required class="form-control" type="hidden" name="pengajuan_id" value="{{$pengajuan->id}}">
-                            <label for="jenis_jurnal" class="col-2 col-form-label">Jenis Jurnal</label>
+                            <label for="jenis_jurnal" class="col-2 col-form-label">Jenis Publikasi</label>
                             <div class="col-10">
                                 <select class="custom-select col-12" id=jenis_jurnal" name="jenis_jurnal">
                                     <option value="">Pilih Jenis Publikasi</option>
@@ -59,6 +59,12 @@
                             <label for="no_jurnal" class="col-2 col-form-label">No Jurnal</label>
                             <div class="col-10">
                                 <input required class="form-control" type="text" name="no_jurnal">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="tahun" class="col-2 col-form-label">Tahun</label>
+                            <div class="col-10">
+                                <input required class="form-control" type="text" name="tahun">
                             </div>
                         </div>
                         <div class="form-group row">

@@ -1,6 +1,10 @@
 @extends('users.home')
 
 @section('title', 'Penambahan Anggota Penelitian')
+@section('breadcrumb','Anggota Penelitian')
+@section('parent-bread')
+    <a href="{{route('daftar_pengajuan.index')}}">Pengajuan Penelitian</a>
+@endsection
 @section('content')
     <div class="row">
         <div class="col-lg-6 col-xlg-6 col-md-6">
@@ -39,7 +43,7 @@
                             <input  class="form-control" type="hidden" name="pengajuan_id" value="{{$pengajuan->id}}">
                             @for ($i = $pengajuan->jumlah_anggota; $i >= 1; $i--)
                                 <div class="input-group col-12" style="margin-bottom: 15px;">
-                                    <select name="profil_id[]" class="select2" style="width: 100%">
+                                    <select name="profil_id[]" class="select2" style="width: 100%" required>
                                         <option value="">Pilih Anggota</option>
                                         @foreach($profile as $profiles)
                                             <option value="{{ $profiles->id}}">{{ $profiles->name }}</option>

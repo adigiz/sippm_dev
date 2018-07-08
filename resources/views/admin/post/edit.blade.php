@@ -1,6 +1,8 @@
 @extends('admin')
 
 @section('title', 'Edit berita / pengumuman')
+@section('parent-bread','Berita / Pengumuman')
+@section('breadcrumb','Edit Berita / Pengumuman')
 @section('content')
     <div class="row">
         <div class="col-lg-8 col-xlg-9 col-md-7">
@@ -26,6 +28,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-12 text-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">Back</a>
                                 <button class="btn btn-success" type="submit">Simpan</button>
                             </div>
                         </div>

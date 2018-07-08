@@ -30,4 +30,12 @@ class FileAdminController extends Controller
     {
         return view('admin/file.create');
     }
+
+    public function destroy($id){
+        $data = File::where('id',$id)->first();
+        $file_path = 'uploads/file/'.$data->nama_file;
+        unlink($file_path);
+        $data->delete();
+        return redirect()->route('file.index')->with('alert-success','Data berhasi dihapus!');
+    }
 }
