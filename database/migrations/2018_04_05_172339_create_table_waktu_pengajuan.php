@@ -17,7 +17,7 @@ class CreateTableWaktuPengajuan extends Migration
             $table->increments('id');
             $table->date('tanggal_buka');
             $table->time('waktu_buka');
-            $table->date('tanggal tutup');
+            $table->date('tanggal_tutup');
             $table->time('waktu_tutup');
             $table->timestamps();
         });
