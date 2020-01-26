@@ -14,9 +14,10 @@ class AdminSeeder extends Seeder
         DB::table('admins')->delete();
         $jenis = [
             [
-                'name' => 'Penelitian',
-                'username' => ''
+                'name' => 'LPPM',
+                'email' => 'lppm@itk.ac.id',
+                'password' => bcrypt('zhA?Ewd2u!@YcNT')
             ],];
-        DB::table('jenis_pengajuans')->insert($jenis);
+        DB::table('admins')->insert($jenis);
     }
 }

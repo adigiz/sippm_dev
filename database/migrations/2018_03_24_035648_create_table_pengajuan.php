@@ -32,8 +32,6 @@ class CreateTablePengajuan extends Migration
         $table->integer('persetujuan_id')->unsigned()->nullable();
         $table->foreign('persetujuan_id')->references('id')->on('jenis_persetujuans');
         $table->string('proposal');
-        $table->integer('waktu_pengajuan_id')->unsigned()->nullable();
-        $table->foreign('waktu_pengajuan_id')->references('id')->on('waktu_pengajuans');
         $table->timestamps();
     });
     }
