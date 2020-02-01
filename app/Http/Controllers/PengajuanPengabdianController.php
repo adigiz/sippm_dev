@@ -48,7 +48,7 @@ class PengajuanPengabdianController extends Controller
         if($sekarang->lt($buka_carbon)){
             return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Belum masuk waktu pengajuan');
         }
-        elseif ( $sekarang->gt($tutup_carbon)){
+        else if ( $sekarang->gt($tutup_carbon)){
             return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Telah lewat masa pengajuan');
         }
         if(Profile::where('user_id',Auth::id())->exists()){
@@ -72,7 +72,6 @@ class PengajuanPengabdianController extends Controller
                 $data['profile'] = Profile::where('user_id',$id)->first();
                 $data['jenis_p'] = JenisPengajuan::where('id', '2')->first();
                 $data['waktu'] = WaktuPengajuan::orderBy('created_at','desc')->first();
-                //$data = PengajuanPenelitian::with('profils')->get();
                 return view('users/pengajuan_pengabdian.create', $data);
             } else {
                 $id_pengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
@@ -98,13 +97,7 @@ class PengajuanPengabdianController extends Controller
      */
     public function store(Request $request)
     {
-//        $id_periode = WaktuPengajuan::orderBy('created_at','desc')->first()->id;
-//        if(Pengajuan::where('waktu_pengajuan_id',$id_periode)->exists()){
-//
-//        }
         $data = new Pengajuan();
-
-
         $input = $request->all();
         $validator = Validator::make($input,
             [
@@ -152,7 +145,6 @@ class PengajuanPengabdianController extends Controller
         $mitra->telp_mitra = $request->telp_mitra;
         $mitra->pengajuan_id = $id;
         $mitra->save();
-//        return redirect()->route('daftar_pengajuan.index')->with('alert-success','Berhasil Menambahkan Data!');
         return redirect()->route('anggota_pengabdian.create')->with('alert-success','Tambahkan Anggota');
     }
 

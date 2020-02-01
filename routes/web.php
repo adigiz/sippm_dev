@@ -14,11 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
 Auth::routes();
-
-
-
 Route::prefix('admin')->group(function (){
     Route::middleware(['admin'])->group(function (){
         Route::get('/', 'AdminController@index')->name('admin.dashboard');
@@ -52,7 +48,6 @@ Route::prefix('users')->group(function(){
         Route::resource('/pengajuan_penelitian/anggota_penelitian','AnggotaPenelitianController');
         Route::resource('/pengajuan_pengabdian/anggota_pengabdian','AnggotaPengabdianController');
         Route::resource('/riwayat', 'RiwayatPenelitianController');
-//        Route::resource('/sedang_berjalan/luaran','LuaranController');
         Route::get('/gantiPassword','HomeController@gantiPasswordIndex');
         Route::get('/daftar_luaran','LuaranController@index');
         route::get('/profil/getProdi/{id}','ProfileController@getProdis');
@@ -114,7 +109,6 @@ Route::prefix('users')->group(function(){
         Route::post('/riwayat/publikasi/tambah','RiwayatPenelitianController@storePublikasi')->name('riwayat.publikasi.store');
         Route::post('/riwayat/pertemuan/tambah','RiwayatPenelitianController@storePertemuan')->name('riwayat.pertemuan.store');
         Route::post('/sedang_berjalan/kelengkapan/store','KelengkapanController@store')->name('kelengkapan.store');
-//        Route::put('/sedang_berjalan/luaran','LuaranController@update')->name('luaran.update');
         Route::match(array('PUT', 'PATCH'), "/sedang_berjalan/luaran/{id}", array(
             'uses' => 'LuaranController@update',
             'as' => 'luaran.update'
@@ -125,7 +119,4 @@ Route::prefix('users')->group(function(){
         ));
 
     });
-
-
-
 });

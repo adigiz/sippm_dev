@@ -22,16 +22,16 @@
                         <div class="form-group row">
                             <label for="name" class="col-2 col-form-label">Nama</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="name" required>
+                                <input class="form-control" type="text"  name="name" required value="{{old('name')}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="avatar" class="col-2 col-form-label">Foto Profil</label>
                             <div class="col-10">
-                                <input class="form-control" type="file"  name="avatar">
+                                <input class="form-control" type="file"  name="avatar" value="{{old('avatar')}}">
                                 @if ($errors->has('avatar'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('avatar') }}</strong>
+                                    <span class="invalid-feedback error">
+                                        <strong style="color: red">{{ $errors->first('avatar') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -39,10 +39,10 @@
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">NIPH</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="niph" required>
+                                <input class="form-control" type="text"  name="niph" required value="{{old('niph')}}">
                                 @if ($errors->has('niph'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('niph') }}</strong>
+                                        <strong style="color: red">{{ $errors->first('niph') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -50,13 +50,13 @@
                         <div class="form-group row">
                             <label for="pangkat" class="col-2 col-form-label">Pangkat</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="pangkat" required>
+                                <input class="form-control" type="text"  name="pangkat" required value="{{old('pangkat')}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jabatan" class="col-2 col-form-label">Jabatan</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="jabatan" required>
+                                <input class="form-control" type="text"  name="jabatan" required value="{{old('jabatan')}}">
                             </div>
                         </div>
 
@@ -80,21 +80,21 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="prodi" class="col-2 col-form-label">Lab</label>
+                            <label for="lab" class="col-2 col-form-label">Lab</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="lab" required>
+                                <input class="form-control" type="text"  name="lab" required value="{{old('lab')}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="prodi" class="col-2 col-form-label">Alamat</label>
+                            <label for="alamat" class="col-2 col-form-label">Alamat</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="alamat" required>
+                                <input class="form-control" type="text"  name="alamat" required value="{{old('alamat')}}">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="prodi" class="col-2 col-form-label">No Telfon</label>
+                            <label for="no_telp" class="col-2 col-form-label">No Telfon</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="no_telp" required>
+                                <input class="form-control" type="text"  name="no_telp" required value="{{old('no_telp')}}">
                             </div>
                         </div>
                         <div class="form-group">
