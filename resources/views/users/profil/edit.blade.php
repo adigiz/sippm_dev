@@ -6,29 +6,18 @@
 @endsection
 @section('breadcrumb','Edit Profil')
 @section('content')
-
     <div class="row">
-        <!-- Column -->
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-block">
                     <center class="m-t-30"> <img src="/uploads/avatar/{{$profile->avatar}}" class="img-circle" width="150" />
                         <br>
-                        {{--<form enctype="multipart/form-data" action="{{action('ProfileController@update',$profile->id)}}" method="POST"></form>--}}
-                        {{--<input name="_method" type="hidden" value="PUT">--}}
-                        {{--<input type="hidden" name="_token" value="{{csrf_token()}}">--}}
-                        {{--<label class="btn btn-info text-center">--}}
-                            {{--Upload Foto <input type="file" name="avatar" hidden>--}}
-                        {{--</label>--}}
                         <br>
                         <h4 class="card-title">{{$users->email}}</h4>
-
                     </center>
                 </div>
             </div>
         </div>
-        <!-- Column -->
-        <!-- Column -->
 
         <div class="col-lg-8 col-xlg-9 col-md-7">
             <div class="card">
@@ -40,7 +29,6 @@
                             <label for="niph" class="col-2 col-form-label">Nama</label>
                             <div class="col-10">
                                 <input class="form-control" type="text"  name="name" value="{{$profile['name']}}">
-
                             </div>
                         </div>
                         <div class="form-group row">
@@ -49,7 +37,7 @@
                                 <input class="form-control" type="file"  name="avatar" value="{{$profile['avatar']}}">
                                 @if ($errors->has('avatar'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('avatar') }}</strong>
+                                        <strong style="color: red">{{ $errors->first('avatar') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -60,7 +48,7 @@
                                 <input class="form-control" type="text"  name="niph" value="{{$profile['niph']}}">
                                 @if ($errors->has('niph'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('niph') }}</strong>
+                                        <strong style="color: red">{{ $errors->first('niph') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -81,9 +69,6 @@
                             <label for="jurusan" class="col-2 col-form-label">Jurusan</label>
                             <div class="col-10">
                                 <select class="custom-select col-12" id="jurusan" name="jurusan">
-                                    {{--@foreach($jurusan as $jurusans)--}}
-                                    {{--<option value="{{$jurusans->id}}">{{$jurusans->nama_jurusan}}</option>--}}
-                                    {{--@endforeach--}}
                                     <option value="{{$profile->jurusan_id}}">Pilih Jurusan</option>
                                     @foreach ($jurusan as $jurusans)
                                         <option value="{{ $jurusans->id}}"> {{ $jurusans->nama_jurusan }}</option>
@@ -97,11 +82,9 @@
                             <div class="col-10">
                                 <select class="custom-select col-12" id="prodi" name="prodi">
                                     <option value="{{$profile->prodi_id}}">Pilih Prodi</option>
-                                    {{--<option value="{{ $prodis->id}}"> {{ $prodis->nama_prodis }}</option>--}}
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group row">
                             <label for="example-datetime-local-input" class="col-2 col-form-label">Lab</label>
                             <div class="col-10">

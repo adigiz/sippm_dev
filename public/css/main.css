@@ -29,8 +29,8 @@
 [ RESTYLE TAG ]*/
 
 * {
-	margin: 0px; 
-	padding: 0px; 
+	margin: 0px;
+	padding: 0px;
 	box-sizing: border-box;
 }
 
@@ -170,7 +170,7 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
+  width: 100%;
   min-height: 100vh;
   display: -webkit-box;
   display: -webkit-flex;
@@ -181,7 +181,7 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  
+
   background-color: #ebebeb;
 }
 
@@ -500,4 +500,8 @@ iframe {
 .btn-1 {
   color: whitesmoke;
   background-image: linear-gradient(to left, #0178bc 0%, #00bdda 100%);
+}
+
+.error-label {
+  color: red;
 }

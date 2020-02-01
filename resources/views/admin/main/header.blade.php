@@ -2,14 +2,8 @@
     <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
         <div class="navbar-header">
             <a class="navbar-brand" href="{{url('admin')}}">
-                <b>
-                    <img src="" alt="SIPPM" class="dark-logo" />
-
-                </b>
-
-                <span>
-                            <img src="" alt="homepage" class="dark-logo" />
-                        </span>
+                <b>SIMPAS</b>
+                <span>homepage</span>
             </a>
         </div>
         <div class="navbar-collapse">

@@ -10,7 +10,6 @@ use App\Jurusan;
 use App\Prodi;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
-use JavaScript;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -60,7 +59,7 @@ class ProfileController extends Controller
         $input = $request->all();
         $validator = Validator::make($input,
             [
-                'niph' => 'required|digits:10|unique:profils,niph',
+                'niph' => 'required|digits:9|unique:profils,niph',
                 'avatar' => 'mimes:jpeg,jpg,png,bmp|max:1024'
             ]
         );
@@ -94,17 +93,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Profile $profile)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Profile  $profile
@@ -117,14 +105,12 @@ class ProfileController extends Controller
         if($current_user != $id){
             return redirect()->to('users/profil');
         } else {
-            $data['users'] = User::find($id);
+            $data['users'] = User::find(Auth::id());
             $data['jurusan'] = Jurusan::all();
             $data['prodi'] = Prodi::all();
             $data['profile'] = Profile::find($id);
             return view('users/profil.edit', $data);
         }
-
-
     }
 
     /**
@@ -166,17 +152,6 @@ class ProfileController extends Controller
         }
         $data->save();
         return redirect('users/profil');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Profile  $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Profile $profile)
-    {
-        //
     }
 
     public function getProdis($id) {

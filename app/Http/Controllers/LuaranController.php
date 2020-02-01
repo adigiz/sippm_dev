@@ -59,17 +59,11 @@ class LuaranController extends Controller
     {
         $data['pengajuan'] = Pengajuan::where('id',$id)->first();
         return view('users/sedang_berjalan/luaran/publikasi.create',$data);
-//        if(Publikasi::where('pengajuan_id',$id)->exists()){
-//            return redirect()->route('sedang_berjalan.index')->with('alert-success','Anda sudah menambahkan luaran');
-//        } else {
-//
-//        }
     }
     public function createHaki($id)
     {
         $data['pengajuan'] = Pengajuan::where('id',$id)->first();
         return view('users/sedang_berjalan/luaran/haki.create',$data);
-//
     }
     public function createPrototype($id)
     {
@@ -82,11 +76,6 @@ class LuaranController extends Controller
     {
         $data['pengajuan'] = Pengajuan::where('id',$id)->first();
         return view('users/sedang_berjalan/luaran/pertemuan.create',$data);
-//        if(PertemuanIlmiah::where('pengajuan_id',$id)->exists()){
-//            return redirect()->route('sedang_berjalan.index')->with('alert-success','Anda sudah menambahkan luaran');
-//        } else {
-//
-//        }
     }
 
     public function storePublikasi(Request $request)
