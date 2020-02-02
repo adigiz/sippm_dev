@@ -1,99 +1,141 @@
 @extends('users.home')
 
 @section('title', 'Pengajuan Penelitian')
+@section('breadcrumb','Pengajuan Penelitian')
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title"> Form Pengajuan Proposal Penelitian</h4>
-                    <form class="form" action="{{action('PengajuanPenelitianController@store')}}" method="POST" enctype="multipart/form-data">
+                    <form class="form" action="{{action('PengajuanPenelitianController@store')}}" method="POST"
+                          enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="form-group m-t-40 row">
                             <label for="judul-penelitian" class="col-2 col-form-label">Judul Penelitian</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text" name="judul_penelitian" placeholder="e.g. Prototype Robot Pemadam Api Berbasis Mikrokontroller Arduino UNO">
+                                <input required class="form-control" type="text" name="judul_penelitian"
+                                       placeholder="e.g. Prototype Robot Pemadam Api Berbasis Mikrokontroller Arduino UNO"
+                                       value="{{old('judul_penelitian')}}">
+                                @if ($errors->has('judul_penelitian'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('judul_penelitian') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group m-t-40 row">
                             <label for="jenis-pengajuan" class="col-2 col-form-label">Jenis Pengajuan</label>
                             <div class="col-10">
-                                <input disabled  class="form-control" type="text" placeholder="{{$jenis_p->nama_jenis}}">
-                                <input  required class="form-control" type="hidden" name="jenis_pengajuan_id" value="{{$jenis_p->id}}">
+                                <input disabled class="form-control" type="text" placeholder="{{$jenis_p->nama_jenis}}">
+                                <input required class="form-control" type="hidden" name="jenis_pengajuan_id"
+                                       value="{{$jenis_p->id}}">
                             </div>
                         </div>
                         <div class="form-group m-t-40 row">
                             <label for="nama-ketua" class="col-2 col-form-label">Nama Ketua</label>
                             <div class="col-10">
-                                <input disabled  class="form-control" type="text" placeholder="{{$profile->name}}">
-                                <input  required class="form-control" type="hidden" name="profil_id" value="{{$profile->id}}">
+                                <input disabled class="form-control" type="text" placeholder="{{$profile->name}}">
+                                <input required class="form-control" type="hidden" name="profil_id"
+                                       value="{{$profile->id}}">
                             </div>
                         </div>
-                        <input required class="form-control" type="hidden" name="waktu_pengajuan_id" value="{{$waktu->id}}">
+                        <input required class="form-control" type="hidden" name="waktu_pengajuan_id"
+                               value="{{$waktu->id}}">
                         <div class="form-group row">
-                            <label for="nama-ketua" class="col-2 col-form-label">Abstrak</label>
+                            <label for="abstrak" class="col-2 col-form-label">Abstrak</label>
                             <div class="col-10">
-                                <textarea required class="form-control" name="abstrak" rows="8"></textarea>
+                                <textarea required class="form-control" name="abstrak" rows="8">
+                                    {{\Illuminate\Support\Facades\Input::old('abstrak')}}
+                                </textarea>
+                                @if ($errors->has('abstrak'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('abstrak') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="niph" class="col-2 col-form-label">Jumlah Anggota</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="1" max="5" name="jumlah_anggota" placeholder="e.g. 1,2,..5">
+                                <input required class="form-control" type="number" min="1" max="5" name="jumlah_anggota"
+                                       placeholder="e.g. 1,2,..5" value="{{old('jumlah_anggota')}}">
+                                @if ($errors->has('jumlah_anggota'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('jumlah_anggota') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml lab" class="col-2 col-form-label">Jumlah Lab</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="0" max="3" name="jumlah_lab" placeholder="e.g. 1,2,..5">
+                                <input required class="form-control" type="number" min="0" max="3" name="jumlah_lab"
+                                       placeholder="e.g. 1,2,..5" value="{{old('jumlah_lab')}}">
+                                @if ($errors->has('jumlah_lab'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('jumlah_lab') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="jml-mhs" class="col-2 col-form-label">Jumlah Mahasiswa</label>
                             <div class="col-10">
-                                <input required class="form-control" type="number" min="0" max="5" name="jumlah_mhs" placeholder="e.g. 1,2,..5">
+                                <input required class="form-control" type="number" min="0" max="5" name="jumlah_mhs"
+                                       placeholder="e.g. 1,2,..5" value="{{old('jumlah_mhs')}}">
+                                @if ($errors->has('jumlah_mhs'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('jumlah_mhs') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="no-telp" class="col-2 col-form-label">No Telpon</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="no_telp" placeholder="e.g. 085287915246">
+                                <input required class="form-control" type="text" name="no_telp"
+                                       placeholder="e.g. 085287915246" value="{{old('no_telp')}}">
                             </div>
-                        </div> <h4 class="card-title"> Form Mitra</h4>
+                        </div>
+                        <h4 class="card-title"> Form Mitra</h4>
                         <div class="form-group row">
                             <label class="custom-control custom-checkbox">
-                                <input class="styled-checkbox" id="mitra-toggle" type="checkbox" name="mitraToggle" onclick="showMitra('mitra','mitra2','mitra3','mitra4','mitra5')">
+                                <input class="styled-checkbox" id="mitra-toggle" type="checkbox" name="mitraToggle"
+                                       onclick="showMitra('mitra','mitra2','mitra3','mitra4','mitra5')">
                                 <label for="mitra-toggle">Memiliki Mitra?</label>
                             </label>
                         </div>
                         <div class="form-group row" id="mitra" style="display:none">
                             <label for="nama-mitra" class="col-2 col-form-label">Nama Mitra</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="nama_mitra">
+                                <input class="form-control" type="text" name="nama_mitra" value="{{old('nama_mitra')}}">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra2" style="display:none">
                             <label for="cp-mitra" class="col-2 col-form-label">Contact Person</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="cp_mitra">
+                                <input class="form-control" type="text" name="cp_mitra" value="{{old('cp_mitra')}}">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra3" style="display:none">
                             <label for="jabatan-mitra" class="col-2 col-form-label">Jabatan</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="jabatan_mitra">
+                                <input class="form-control" type="text" name="jabatan_mitra"
+                                       value="{{old('jabatan_mitra')}}">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra4" style="display:none">
                             <label for="alamat-mitra" class="col-2 col-form-label">Alamat</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="alamat_mitra">
+                                <input class="form-control" type="text" name="alamat_mitra"
+                                       value="{{old('alamat_mitra')}}">
                             </div>
                         </div>
                         <div class="form-group row" id="mitra5" style="display:none">
                             <label for="telp-mitra" class="col-2 col-form-label">No Telfon</label>
                             <div class="col-10">
-                                <input class="form-control" type="text"  name="telp_mitra">
+                                <input class="form-control" type="text" name="telp_mitra" value="{{old('telp_mitra')}}">
                             </div>
                         </div>
                         <hr>
@@ -101,28 +143,37 @@
                         <div class="form-group row">
                             <label for="total_dana" class="col-2 col-form-label">Total Dana yang Dibutuhkan</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="total_dana" placeholder="e.g. 5000000">
+                                <input required class="form-control" type="text" name="total_dana"
+                                       placeholder="e.g. 5000000" value="{{old('total_dana')}}">
+                                @if ($errors->has('total_dana'))
+                                    <span class="invalid-feedback">
+                                        <strong style="color: red">{{ $errors->first('total_dana') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-pribadi" class="col-2 col-form-label">Dana Pribadi</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="dana_pribadi" placeholder="e.g. 5000000 / Tidak Ada">
+                                <input required class="form-control" type="text" name="dana_pribadi"
+                                       placeholder="e.g. 5000000 / Tidak Ada" value="{{old('dana_pribadi')}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="dana-lain" class="col-2 col-form-label">Dana Lain</label>
                             <div class="col-10">
-                                <input required class="form-control" type="text"  name="dana_lain" placeholder="e.g. 5000000 / Tidak Ada">
+                                <input required class="form-control" type="text" name="dana_lain"
+                                       placeholder="e.g. 5000000 / Tidak Ada" value="{{old('dana_lain')}}">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="upload" class="col-2 col-form-label">Upload Proposal</label>
                             <div class="col-10">
-                                <input required class="form-control" type="file"  name="proposal">
+                                <input required class="form-control" type="file" name="proposal"
+                                       value="{{old('proposal')}}">
                                 @if ($errors->has('proposal'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('proposal') }}</strong>
+                                        <strong style="color: red">{{ $errors->first('proposal') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -133,7 +184,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>

@@ -13,14 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AnggotaPenelitianController extends Controller
 {
-    //
     public function create()
     {
         $id_profil = Profile::where('user_id',Auth::id())->first()->id;
-        $var = Pengajuan::where('profil_id', $id_profil)->where('jenis_pengajuan_id', 1)->exists();
+        $has_pengajuan = Pengajuan::where('profil_id', $id_profil)->where('jenis_pengajuan_id', 1)->exists();
         $id_pengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 1)->orderBy('created_at', 'desc')->first()->id;
 
-        if($var) {
+        if($has_pengajuan) {
             if(Anggota::where('pengajuan_id',$id_pengajuan)->exists()){
                 return redirect()->route('daftar_pengajuan.index');
             } else {
@@ -30,7 +29,6 @@ class AnggotaPenelitianController extends Controller
                 $data['pengajuan'] = Pengajuan::where('id',$id_pengajuan)->first();
                 return view('users/pengajuan_penelitian/anggota_penelitian.create', $data);
             }
-
         } else {
             return redirect()->route('pengajuan_penelitian.create')->with('alert-warning','Anda belum mengajukan Penelitian');
         }

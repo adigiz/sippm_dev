@@ -18,7 +18,7 @@ class CreateTableMitra extends Migration
             $table->string('nama_mitra',30)->nullable();
             $table->string('cp_mitra',30)->nullable();
             $table->string('jabatan_mitra',30)->nullable();
-            $table->string('alamat_mitra',50)->nullable();
+            $table->string('alamat_mitra',255)->nullable();
             $table->string('telp_mitra',13)->nullable();
             $table->integer('pengajuan_id')->unsigned()->nullable();
             $table->foreign('pengajuan_id')->references('id')->on('pengajuans');

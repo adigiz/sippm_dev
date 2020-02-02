@@ -71,13 +71,19 @@
                                             <span class="label label-primary">Belum diperiksa</span>
                                         @endif
                                     </td>
-                                    <td>{{date('Y',strtotime($pengajuan->waktus['tanggal_buka'] . "+ 1 day"))}}/{{date('Y',strtotime($pengajuan->waktus['tanggal_tutup'] . "+ 1 year"))}}</td>
+                                    <td>{{date('Y',strtotime($pengajuan->tanggal_buka . "+ 1 day"))}}/{{date('Y',strtotime($pengajuan->tanggal_tutup . "+ 1 year"))}}</td>
                                     <td>
                                         <div class="col-sm-12 text-right">
                                             @if($pengajuan->jenis_pengajuan_id == 1)
                                                 <a href="{{ action('PengajuanPenelitianController@show' , $pengajuan['id'])}}" class="btn btn-sm btn btn-info" >Detail Pengajuan</a>
-                                                @if($pengajuan->profil_id == $profile->id)
-                                                    <a href="{{ action('PengajuanPenelitianController@edit', $pengajuan['id'])}}" class="btn btn-sm btn-warning">Edit Pengajuan</a>
+                                                @if($pengajuan->profil_id == $profile->id && $pengajuan->is_current_pengajuan)
+                                                    <a href="{{ action('PengajuanPenelitianController@edit', $pengajuan['id'])}}" class="btn btn-sm btn-warning">
+                                                        @if(!$anggotas->contains('pengajuan_id',$pengajuan->id))
+                                                        Tambah Anggota
+                                                        @else
+                                                        Edit Pengajuan
+                                                        @endif
+                                                    </a>
                                                     <form action="{{ route('pengajuan_penelitian.destroy', $pengajuan['id']) }}" method="post">
                                                         {{ csrf_field() }}
                                                         {{ method_field('DELETE') }}
@@ -87,8 +93,14 @@
 
                                             @else
                                                 <a href="{{ action('PengajuanPengabdianController@show', $pengajuan['id'])}}" class="btn btn-sm btn btn-info" >Detail Pengajuan</a>
-                                                @if($pengajuan->profil_id == $profile->id)
-                                                    <a href="{{ action('PengajuanPengabdianController@edit', $pengajuan['id'])}}" class="btn btn-sm btn-warning">Edit Pengajuan</a>
+                                                @if($pengajuan->profil_id == $profile->id && $pengajuan->is_current_pengajuan)
+                                                    <a href="{{ action('PengajuanPengabdianController@edit', $pengajuan['id'])}}" class="btn btn-sm btn-warning">
+                                                        @if(!$anggotas->contains('pengajuan_id',$pengajuan->id))
+                                                            Tambah Anggota
+                                                        @else
+                                                            Edit Pengajuan
+                                                        @endif
+                                                    </a>
                                                     <form action="{{ route('pengajuan_pengabdian.destroy', $pengajuan['id']) }}" method="post">
                                                         {{ csrf_field() }}
                                                         {{ method_field('DELETE') }}

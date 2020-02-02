@@ -3,7 +3,6 @@
 @section('title', 'Profil')
 @section('breadcrumb','Profil')
 @section('content')
-
     <div class="row">
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
