@@ -1,6 +1,10 @@
 @extends('users.home')
 
-@section('title', 'Penambahan Anggota Pengabdian')
+@section('title', 'Penambahan Anggota Penelitian')
+@section('breadcrumb','Anggota Penelitian')
+@section('parent-bread')
+    <a href="{{route('daftar_pengajuan.index')}}">Pengajuan Penelitian</a>
+@endsection
 @section('content')
     @if(\Illuminate\Support\Facades\Session::has('alert-danger'))
         <div class="alert alert-success">

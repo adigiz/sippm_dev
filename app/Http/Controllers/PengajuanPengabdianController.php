@@ -53,20 +53,20 @@ class PengajuanPengabdianController extends Controller
         }
         if(Profile::where('user_id',Auth::id())->exists()){
             $id_profil = Profile::where('user_id', Auth::id())->first()->id;
-            $var = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->doesntExist();
-            if($var){
-                $checker = FALSE;
+            $hasNoPengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->doesntExist();
+            if($hasNoPengajuan){
+                $is_previous_period_pengajuan = FALSE;
             } else {
-                $cek = Pengajuan::where('profil_id',$id_profil)->where('jenis_pengajuan_id',2)->orderBy('created_at','desc')->first()->created_at;
-                $cek_periode = Carbon::parse($cek);
-                $checker = $cek_periode->lt($buka_carbon);
+                $pengajuan_date = Pengajuan::where('profil_id',$id_profil)->where('jenis_pengajuan_id',2)->orderBy('created_at','desc')->first()->created_at;
+                $parsed_pengajuan_date = Carbon::parse($pengajuan_date);
+                $is_previous_period_pengajuan = $parsed_pengajuan_date->lt($buka_carbon);
             }
-            if(($var == FALSE) && ($checker == FALSE)){
-                $bool = TRUE;
+            if(($hasNoPengajuan == FALSE) && ($is_previous_period_pengajuan == FALSE)){
+                $able_to_mengajukan = FALSE;
             } else {
-                $bool = FALSE;
+                $able_to_mengajukan = TRUE;
             }
-            if($bool == FALSE) {
+            if($able_to_mengajukan) {
                 $id = Auth::id();
                 $data['users'] = User::find($id);
                 $data['profile'] = Profile::where('user_id',$id)->first();
@@ -75,8 +75,8 @@ class PengajuanPengabdianController extends Controller
                 return view('users/pengajuan_pengabdian.create', $data);
             } else {
                 $id_pengajuan = DB::table('pengajuans')->where('profil_id', $id_profil)->where('jenis_pengajuan_id', 2)->orderBy('created_at', 'desc')->first()->id;
-                $check = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
-                if($check){
+                $isKetua = DB::table('anggotas')->where('pengajuan_id', $id_pengajuan)->exists();
+                if($isKetua){
                     return redirect()->route('daftar_pengajuan.index')->with('alert-warning','Anda telah mengajukan pengabdian sebagai ketua');
                 }
                 else {
@@ -103,11 +103,16 @@ class PengajuanPengabdianController extends Controller
             [
                 'judul_penelitian' => 'required',
                 'abstrak' => 'required',
-                'jumlah_lab' => 'required|between:1,5',
-                'jumlah_anggota' => 'required|between:1,5',
-                'jumlah_mhs' => 'required|between:1,5',
+                'jumlah_lab' => 'required|integer|between:0,5',
+                'jumlah_anggota' => 'required|integer|between:1,5',
+                'jumlah_mhs' => 'required|integer|between:0,5',
                 'total_dana' => 'required|numeric',
-                'proposal' => 'required|mimes:pdf|max:2048'
+                'proposal' => 'required|mimes:pdf|max:2048',
+                'nama_mitra' => 'required',
+                'cp_mitra' => 'required',
+                'jabatan_mitra' => 'required',
+                'alamat_mitra' => 'required',
+                'telp_mitra' => 'required'
             ]
         );
         if ($validator->fails()) {
@@ -175,6 +180,15 @@ class PengajuanPengabdianController extends Controller
      */
     public function edit($id)
     {
+        if(!Anggota::where('pengajuan_id',$id)->exists()) {
+            $id_profil = Profile::where('user_id',Auth::id())->first()->id;
+            $data['ketua'] = Profile::where('user_id',Auth::id())->first();
+            $data['profile'] =  Profile::where('id','!=',$id_profil)->get();
+            $data['jenis_p'] = JenisPengajuan::where('id', '1')->first();
+            $data['mitra'] = Mitra::where('pengajuan_id',$id)->first();
+            $data['pengajuan'] = Pengajuan::where('id',$id)->orderBy('created_at', 'desc')->first();
+            return view('users/pengajuan_pengabdian/anggota_pengabdian.create', $data);
+        }
         $current_user = Profile::where('user_id',Auth::id())->first()->id;
         $id_pengajuan = Pengajuan::where('profil_id', $current_user)->pluck('id')->toArray();
         if(in_array($id,$id_pengajuan)){
